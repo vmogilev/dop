@@ -1,6 +1,7 @@
 package main
 
 import (
+	"encoding/json"
 	"flag"
 	"fmt"
 	"github.com/jpoehls/go-dayone"
@@ -12,9 +13,10 @@ import (
 )
 
 type Journal struct {
-	Key   string   `json:"Key"`
+	Id    string   `json:"Id"`
 	Title string   `json:"Title"`
 	Tags  []string `json:"Tags"`
+	Sort  string   `json:"Sort"`
 }
 
 func main() {
@@ -47,16 +49,25 @@ func main() {
 		//const layout = time.RubyDate
 		const layout = "Mon, 02 Jan 2006"
 		l = append(l, Journal{
-			Key:   e.UUID(),
+			Id:    e.UUID(),
 			Title: e.CreationDate.Local().Format(layout),
 			Tags:  e.Tags,
+			Sort:  e.CreationDate.Local().Format("2006.01.02-15.04.05"),
 		})
 		return nil
 	}
 
 	err = j.Read(parse)
-	fmt.Println(l)
 	if err != nil {
 		panic(err)
 	}
+
+	//fmt.Println(l)
+	b, err := json.MarshalIndent(l, "", "    ")
+	if err != nil {
+		fmt.Printf("ERROR: encoding JSON: %s\n", err)
+		os.Exit(1)
+	}
+	os.Stdout.Write(b)
+
 }
