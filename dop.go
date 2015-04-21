@@ -8,16 +8,25 @@ import (
 	"io/ioutil"
 	"os"
 	"path/filepath"
-	//"time"
+	"sort"
+	"time"
 	//	"strings"
 )
 
 type Journal struct {
-	Id    string   `json:"Id"`
-	Title string   `json:"Title"`
-	Tags  []string `json:"Tags"`
-	Sort  string   `json:"Sort"`
+	Id    string    `json:"Id"`
+	Title string    `json:"Title"`
+	Tags  []string  `json:"Tags"`
+	Date  time.Time `json:"Date"`
 }
+
+// ByAge implements sort.Interface for []Journal based on
+// the Date field.
+type ByDate []Journal
+
+func (a ByDate) Len() int           { return len(a) }
+func (a ByDate) Swap(i, j int)      { a[i], a[j] = a[j], a[i] }
+func (a ByDate) Less(i, j int) bool { return a[i].Date.Before(a[j].Date) }
 
 func main() {
 	var journal string
@@ -34,7 +43,7 @@ func main() {
 
 	fmt.Printf("Found %d journal entries in %s\n", len(files), journal)
 	//l := make([]Journal, len(files))
-	var l []Journal
+	var journals []Journal
 
 	j := dayone.NewJournal(journal)
 
@@ -48,11 +57,11 @@ func main() {
 		fmt.Printf("Date: %s [%s] %s\n", e.CreationDate.Local(), e.UUID(), e.Tags)
 		//const layout = time.RubyDate
 		const layout = "Mon, 02 Jan 2006"
-		l = append(l, Journal{
+		journals = append(journals, Journal{
 			Id:    e.UUID(),
 			Title: e.CreationDate.Local().Format(layout),
 			Tags:  e.Tags,
-			Sort:  e.CreationDate.Local().Format("2006.01.02-15.04.05"),
+			Date:  e.CreationDate,
 		})
 		return nil
 	}
@@ -63,7 +72,8 @@ func main() {
 	}
 
 	//fmt.Println(l)
-	b, err := json.MarshalIndent(l, "", "    ")
+	sort.Sort(ByDate(journals))
+	b, err := json.MarshalIndent(journals, "", "    ")
 	if err != nil {
 		fmt.Printf("ERROR: encoding JSON: %s\n", err)
 		os.Exit(1)
