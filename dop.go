@@ -3,7 +3,7 @@ package main
 import (
 	"encoding/json"
 	"flag"
-	"fmt"
+	//"fmt"
 	"github.com/jpoehls/go-dayone"
 	"io/ioutil"
 	"log"
@@ -51,8 +51,6 @@ func main() {
 	jd := filepath.Join(journal, "entries")
 	files, err := ioutil.ReadDir(jd)
 	if err != nil {
-		//fmt.Printf("ERROR: Journal directory is not readable: %s\n", jd)
-		//os.Exit(1)
 		log.Fatalf("ERROR: Journal directory is not readable: %s\n", jd)
 	}
 
@@ -100,12 +98,9 @@ func main() {
 	if entry != "" {
 		e, err := j.ReadEntry(entry)
 		if err != nil {
-			panic(err)
+			log.Panic(err)
 		}
 		err = parse(e, nil, true)
-		if err != nil {
-			panic(err)
-		}
 
 	} else {
 		// closure to wrap the extra param
@@ -114,16 +109,16 @@ func main() {
 			//return err
 
 		})
-		if err != nil {
-			panic(err)
-		}
+	}
+
+	if err != nil {
+		log.Panic(err)
 	}
 
 	sort.Sort(ByDate(journals))
 	b, err := json.MarshalIndent(journals, "", "    ")
 	if err != nil {
-		fmt.Printf("ERROR: encoding JSON: %s\n", err)
-		os.Exit(1)
+		log.Panicf("ERROR: encoding JSON: %s\n", err)
 	}
 	os.Stdout.Write(b)
 
