@@ -53,7 +53,7 @@ func main() {
 	if err != nil {
 		//fmt.Printf("ERROR: Journal directory is not readable: %s\n", jd)
 		//os.Exit(1)
-		log.Fatalln("ERROR: Journal directory is not readable: %s\n", jd)
+		log.Fatalf("ERROR: Journal directory is not readable: %s\n", jd)
 	}
 
 	log.Printf("Found %d journal entries in %s\n", len(files), journal)
