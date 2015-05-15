@@ -14,12 +14,13 @@ import (
 )
 
 type Journal struct {
-	Id      string      `json:"id"`
-	Title   string      `json:"title"`
-	Starred bool        `json:"starred"`
-	Tags    []string    `json:"tags"`
-	Date    time.Time   `json:"date"`
-	Photo   interface{} `json:"photo"` // interface is needed here so we can assign "nil" to entry that has no photo
+	Id        string      `json:"id"`
+	Title     string      `json:"title"`
+	Starred   bool        `json:"starred"`
+	Tags      []string    `json:"tags"`
+	Date      time.Time   `json:"date"`
+	Photo     interface{} `json:"photo"` // interface is needed here so we can assign "nil" to entry that has no photo
+	EntryText string      `json:"entrytext"`
 }
 
 // ByDate implements sort.Interface for []Journal based on
@@ -49,8 +50,10 @@ func main() {
 
 	j := dayone.NewJournal(journal)
 
-	parse := func(e *dayone.Entry, err error) error {
+	parse := func(e *dayone.Entry, err error, gettext bool) error {
 		var photo interface{}
+		var etext string
+
 		if err != nil {
 			return err
 		}
@@ -65,13 +68,20 @@ func main() {
 			photo = nil
 		}
 
+		if gettext {
+			etext = e.EntryText
+		} else {
+			etext = ""
+		}
+
 		journals = append(journals, Journal{
-			Id:      e.UUID(),
-			Title:   e.CreationDate.Local().Format(layout),
-			Starred: e.Starred,
-			Tags:    e.Tags,
-			Date:    e.CreationDate,
-			Photo:   photo,
+			Id:        e.UUID(),
+			Title:     e.CreationDate.Local().Format(layout),
+			Starred:   e.Starred,
+			Tags:      e.Tags,
+			Date:      e.CreationDate,
+			Photo:     photo,
+			EntryText: etext,
 		})
 		return nil
 	}
@@ -81,13 +91,18 @@ func main() {
 		if err != nil {
 			panic(err)
 		}
-		err = parse(e, nil)
+		err = parse(e, nil, true)
 		if err != nil {
 			panic(err)
 		}
 
 	} else {
-		err = j.Read(parse)
+		// closure to wrap the extra param
+		err = j.Read(func(e *dayone.Entry, err error) error {
+			return parse(e, err, false)
+			//return err
+
+		})
 		if err != nil {
 			panic(err)
 		}
