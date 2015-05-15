@@ -6,6 +6,7 @@ import (
 	"fmt"
 	"github.com/jpoehls/go-dayone"
 	"io/ioutil"
+	"log"
 	"os"
 	"path/filepath"
 	"sort"
@@ -34,18 +35,28 @@ func (a ByDate) Less(i, j int) bool { return a[i].Date.Before(a[j].Date) }
 func main() {
 	var journal string
 	var entry string
+	var debug bool
 	flag.StringVar(&journal, "journal", "./", "Journal Directory name")
 	flag.StringVar(&entry, "entry", "", "Entry UUID")
+	flag.BoolVar(&debug, "debug", false, "Debug")
 	flag.Parse()
+
+	log.SetFlags(log.LstdFlags)
+	if debug {
+		log.SetOutput(os.Stderr)
+	} else {
+		log.SetOutput(ioutil.Discard)
+	}
 
 	jd := filepath.Join(journal, "entries")
 	files, err := ioutil.ReadDir(jd)
 	if err != nil {
-		fmt.Printf("ERROR: Journal directory is not readable: %s\n", jd)
-		os.Exit(1)
+		//fmt.Printf("ERROR: Journal directory is not readable: %s\n", jd)
+		//os.Exit(1)
+		log.Fatalln("ERROR: Journal directory is not readable: %s\n", jd)
 	}
 
-	fmt.Printf("Found %d journal entries in %s\n", len(files), journal)
+	log.Printf("Found %d journal entries in %s\n", len(files), journal)
 	var journals []Journal
 
 	j := dayone.NewJournal(journal)
@@ -58,7 +69,7 @@ func main() {
 			return err
 		}
 
-		fmt.Printf("Date: %s [%s] %s\n", e.CreationDate.Local(), e.UUID(), e.Tags)
+		log.Printf("Date: %s [%s] %s\n", e.CreationDate.Local(), e.UUID(), e.Tags)
 		const layout = "Mon, 02 Jan 2006"
 
 		p, err := j.PhotoStat(e.UUID())
