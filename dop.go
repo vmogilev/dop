@@ -95,7 +95,8 @@ func main() {
 		return nil
 	}
 
-	if entry != "" {
+	var parseall bool
+	if (entry != "") && (entry != "*") {
 		e, err := j.ReadEntry(entry)
 		if err != nil {
 			log.Panic(err)
@@ -103,9 +104,14 @@ func main() {
 		err = parse(e, nil, true)
 
 	} else {
+		if entry == "*" {
+			parseall = true
+		} else {
+			parseall = false
+		}
 		// closure to wrap the extra param
 		err = j.Read(func(e *dayone.Entry, err error) error {
-			return parse(e, err, false)
+			return parse(e, err, parseall)
 			//return err
 
 		})
