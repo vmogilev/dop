@@ -72,7 +72,8 @@ func main() {
 
 		p, err := j.PhotoStat(e.UUID())
 		if (err == nil) && (p != nil) {
-			photo = p.Name()
+			//photo = filepath.Join(journal, "photos", p.Name())
+			photo = filepath.Join("photos", p.Name())
 		} else {
 			photo = nil
 		}
