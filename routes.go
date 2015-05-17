@@ -16,12 +16,12 @@ var routes = Routes{
 		"EntryList",
 		"GET",
 		"/list",
-		myjournal.JournalParser,
+		myjournal.List,
 	},
 	Route{
 		"EntryShow",
 		"GET",
 		"/entry/{entryId}",
-		myjournal.JournalParser,
+		myjournal.List,
 	},
 }
