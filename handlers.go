@@ -10,6 +10,7 @@ import (
 	"time"
 	//	"strings"
 
+	"github.com/gorilla/mux"
 	"github.com/jpoehls/go-dayone"
 )
 
@@ -31,11 +32,22 @@ func (a ByDate) Len() int           { return len(a) }
 func (a ByDate) Swap(i, j int)      { a[i], a[j] = a[j], a[i] }
 func (a ByDate) Less(i, j int) bool { return a[i].Date.Before(a[j].Date) }
 
+func NotFound(id string, w http.ResponseWriter) {
+	w.Header().Set("Content-Type", "application/json; charset=UTF-8")
+	w.WriteHeader(http.StatusNotFound)
+	if err := json.NewEncoder(w).Encode(jsonErr{Code: http.StatusNotFound, Text: "Not Found", Id: id}); err != nil {
+		log.Panic(err)
+	}
+
+}
+
 func (myjournal *Myjournal) Index(w http.ResponseWriter, r *http.Request) {
+	vars := mux.Vars(r)
 	var err error
 	var entry string
 	var journals []Journal
 
+	entry = vars["entryId"]
 	j := dayone.NewJournal(myjournal.journal)
 
 	parse := func(e *dayone.Entry, err error, gettext bool) error {
@@ -79,7 +91,8 @@ func (myjournal *Myjournal) Index(w http.ResponseWriter, r *http.Request) {
 	if (entry != "") && (entry != "*") {
 		e, err := j.ReadEntry(entry)
 		if err != nil {
-			log.Panic(err)
+			NotFound(entry, w)
+			return
 		}
 		err = parse(e, nil, true)
 

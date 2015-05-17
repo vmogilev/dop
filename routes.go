@@ -15,13 +15,13 @@ var routes = Routes{
 	Route{
 		"Index",
 		"GET",
-		"/",
+		"/list",
 		myjournal.Index,
 	},
-	//Route{
-	//	"EntryShow",
-	//	"GET",
-	//	"/entry/{entryId}",
-	//	myjournal.EntryShow,
-	//},
+	Route{
+		"EntryShow",
+		"GET",
+		"/entry/{entryId}",
+		myjournal.Index,
+	},
 }
