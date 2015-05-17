@@ -21,7 +21,7 @@ func (myjournal *Myjournal) List(w http.ResponseWriter, r *http.Request) {
 	vars := mux.Vars(r)
 	var err error
 	var entry string
-	var journals []Journal
+	var journals Journals
 
 	entry = vars["entryId"]
 	journals, err = myjournal.JournalParser(entry)
