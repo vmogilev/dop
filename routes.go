@@ -13,15 +13,15 @@ type Routes []Route
 
 var routes = Routes{
 	Route{
-		"Index",
+		"EntryList",
 		"GET",
 		"/list",
-		myjournal.Index,
+		myjournal.JournalParser,
 	},
 	Route{
 		"EntryShow",
 		"GET",
 		"/entry/{entryId}",
-		myjournal.Index,
+		myjournal.JournalParser,
 	},
 }

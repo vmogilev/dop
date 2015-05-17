@@ -41,7 +41,7 @@ func NotFound(id string, w http.ResponseWriter) {
 
 }
 
-func (myjournal *Myjournal) Index(w http.ResponseWriter, r *http.Request) {
+func (myjournal *Myjournal) JournalParser(w http.ResponseWriter, r *http.Request) {
 	vars := mux.Vars(r)
 	var err error
 	var entry string
