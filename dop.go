@@ -10,7 +10,7 @@ import (
 )
 
 type Myjournal struct {
-	journal string
+	dir string
 }
 
 var myjournal Myjournal
@@ -37,7 +37,7 @@ func main() {
 
 	log.Printf("Found %d journal entries in %s\n", len(files), journal)
 
-	myjournal = Myjournal{journal: journal}
+	myjournal = Myjournal{dir: journal}
 
 	router := NewRouter()
 

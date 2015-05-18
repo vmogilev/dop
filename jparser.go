@@ -34,7 +34,7 @@ func (myjournal *Myjournal) JournalParser(entry string) (Journals, error) {
 	var err error
 	var journals Journals
 
-	j := dayone.NewJournal(myjournal.journal)
+	j := dayone.NewJournal(myjournal.dir)
 
 	parse := func(e *dayone.Entry, err error, gettext bool) error {
 		var photo interface{}
