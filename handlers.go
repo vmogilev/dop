@@ -24,7 +24,7 @@ func (myjournal *Myjournal) List(w http.ResponseWriter, r *http.Request) {
 	var journals Journals
 
 	entry = vars["entryId"]
-	journals, err = myjournal.JournalParser(entry)
+	journals, err = myjournal.Parse(entry)
 	if (err != nil) && (err.Error() == "NotFound") {
 		NotFound(entry, w)
 		return

@@ -30,7 +30,7 @@ func (a ByDate) Len() int           { return len(a) }
 func (a ByDate) Swap(i, j int)      { a[i], a[j] = a[j], a[i] }
 func (a ByDate) Less(i, j int) bool { return a[i].Date.Before(a[j].Date) }
 
-func (myjournal *Myjournal) JournalParser(entry string) (Journals, error) {
+func (myjournal *Myjournal) Parse(entry string) (Journals, error) {
 	var err error
 	var journals Journals
 
