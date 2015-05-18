@@ -17,7 +17,7 @@ type Journal struct {
 	Tags      []string    `json:"tags"`
 	Date      time.Time   `json:"date"`
 	Photo     interface{} `json:"photo"` // interface is needed here so we can assign "nil" to entry that has no photo
-	EntryText string      `json:"entrytext"`
+	EntryText string      `json:"entrytext,omitempty"`
 }
 
 type Journals []Journal
