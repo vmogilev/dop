@@ -13,8 +13,8 @@ var templates = template.Must(template.ParseFiles(
 
 type Page struct {
 	Title   string
-	Navbar  Journals
-	Content Journals
+	Navbar  interface{}
+	Content interface{}
 }
 
 func renderTemplate(w http.ResponseWriter, tmpl string, p *Page) {
