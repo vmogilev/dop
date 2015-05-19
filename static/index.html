@@ -1,1 +1,122 @@
-hi there!
+<!-- index.html -->
+<html>
+  <head>
+    <title>Hello React</title>
+    <script src="https://fb.me/react-0.13.3.js"></script>
+    <script src="https://fb.me/JSXTransformer-0.13.3.js"></script>
+    <script src="https://code.jquery.com/jquery-2.1.3.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/marked/0.3.2/marked.min.js"></script>
+  </head>
+  <body>
+    <div id="content"></div>
+    <script type="text/jsx">
+
+var EntryTitle = React.createClass({
+  render: function() {
+    return (
+      <tr className="eRow">
+        <td className="eTit">
+          {this.props.title}
+        </td>
+        <td className="eDate">
+          {this.props.date}
+        </td>
+      </tr>
+    );
+  }
+});
+
+var Entry = React.createClass({
+  render: function() {
+    var rawMarkup = marked(this.props.children.toString(), {sanitize: true});
+    return (
+      <div className="entryMain">
+        <h2 className="entryTitle">
+          {this.props.title}
+        </h2>
+        <span> {this.props.date} </span>
+        <span dangerouslySetInnerHTML={{__html: rawMarkup}} />
+      </div>
+    );
+  }
+});
+
+var CommentList = React.createClass({
+  render: function() {
+    var entryNodes = this.props.data.map(function (e) {
+      return (
+        <EntryTitle key={e.id} title={e.title} starred={e.starred} date={e.date}>
+        </EntryTitle>
+      );
+    });
+    return (
+      <div className="entryList">
+        <table class="entryTable">
+        {entryNodes}
+        </table>
+      </div>
+    );
+  }
+});
+
+var EntryDetail = React.createClass({
+  render: function() {
+    var entryDetail = this.props.data.map(function (e) {
+      return (
+        <Entry key={e.id} title={e.title} starred={e.starred} date={e.date}>
+          {e.entrytext}
+        </Entry>
+      );
+    });
+    return (
+      <div className="currentEntry">
+      {entryDetail}
+      </div>
+    );
+  }
+});
+
+var CommentBox = React.createClass({
+  loadCommentsFromServer: function() {
+    $.ajax({
+      url: this.props.url,
+      dataType: 'json',
+      cache: false,
+      success: function(data) {
+        this.setState({data: data});
+      }.bind(this),
+      error: function(xhr, status, err) {
+        console.error(this.props.url, status, err.toString());
+      }.bind(this)
+    });
+  },
+  getInitialState: function() {
+    return {data: []};
+  },
+  componentDidMount: function() {
+    this.loadCommentsFromServer();
+    setInterval(this.loadCommentsFromServer, this.props.pollInterval);
+  },
+  render: function() {
+    return (
+      <div className="wrapperBox">
+      <div className="commentBox">
+        <h1>Entries</h1>
+        <CommentList data={this.state.data} />
+      </div>
+      <div className="entryBox">
+        <EntryDetail data={this.state.data} />
+      </div>
+      </div>
+    );
+  }
+});
+React.render(
+  <CommentBox url="/entry/*" pollInterval={12000} />,
+  document.getElementById('content')
+);
+
+    </script>
+  </body>
+</html>
+

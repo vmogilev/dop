@@ -37,5 +37,28 @@ func (myjournal *Myjournal) List(w http.ResponseWriter, r *http.Request) {
 	w.Header().Set("Content-Type", "application/json; charset=UTF-8")
 	w.WriteHeader(http.StatusOK)
 	w.Write(b)
+}
 
+func (mj *Myjournal) Index(w http.ResponseWriter, r *http.Request) {
+	vars := mux.Vars(r)
+	var err error
+	var entry string
+	var journals Journals
+	var current Journals
+
+	journals, err = myjournal.Parse("")
+
+	entry = vars["entryId"]
+	if entry == "" {
+		entry = journals[0].Id
+	}
+
+	current, err = myjournal.Parse(entry)
+	if (err != nil) && (err.Error() == "NotFound") {
+		NotFound(entry, w)
+		return
+	}
+
+	page := Page{Title: "Vitaliy's Food Journal", Navbar: journals, Content: current}
+	renderTemplate(w, "index", &page)
 }
