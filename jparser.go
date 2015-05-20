@@ -20,7 +20,7 @@ type Journal struct {
 	Date      time.Time     `json:"date"`
 	Photo     interface{}   `json:"photo"` // interface is needed here so we can assign "nil" to entry that has no photo
 	EntryText string        `json:"entrytext,omitempty"`
-	EntryMD   template.HTML `json:"entrymd,omitempty"`
+	EntryMD   template.HTML `json:"-"`
 }
 
 type Journals []Journal
