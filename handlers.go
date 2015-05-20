@@ -45,12 +45,16 @@ func (mj *Myjournal) Index(w http.ResponseWriter, r *http.Request) {
 	var entry string
 	var journals Journals
 	var current Journals
+	var list bool
 
-	journals, err = myjournal.Parse("")
+	journals, err = myjournal.Parse("*")
 
 	entry = vars["entryId"]
 	if entry == "" {
 		entry = journals[0].Id
+		list = true
+	} else {
+		list = false
 	}
 
 	current, err = myjournal.Parse(entry)
@@ -59,6 +63,6 @@ func (mj *Myjournal) Index(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	page := Page{Title: "Vitaliy's Food Journal", Navbar: journals, Content: current}
+	page := Page{Title: "Vitaliy's Food Journal", IsList: list, Navbar: journals, Content: current}
 	renderTemplate(w, "dop", &page)
 }

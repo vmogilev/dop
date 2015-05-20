@@ -6,6 +6,7 @@ import (
 	"log"
 	"path/filepath"
 	"sort"
+	"strings"
 	"time"
 
 	"github.com/jpoehls/go-dayone"
@@ -19,6 +20,7 @@ type Journal struct {
 	Tags      []string      `json:"tags"`
 	Date      time.Time     `json:"date"`
 	Photo     interface{}   `json:"photo"` // interface is needed here so we can assign "nil" to entry that has no photo
+	Count     int           `json:"count"`
 	EntryText string        `json:"entrytext,omitempty"`
 	EntryMD   template.HTML `json:"-"`
 }
@@ -43,6 +45,7 @@ func (myjournal *Myjournal) Parse(entry string) (Journals, error) {
 		var photo interface{}
 		var etext string
 		var md template.HTML
+		var cnt int
 
 		if err != nil {
 			return err
@@ -62,9 +65,11 @@ func (myjournal *Myjournal) Parse(entry string) (Journals, error) {
 		if gettext {
 			etext = e.EntryText
 			md = template.HTML(blackfriday.MarkdownCommon([]byte(etext)))
+			cnt = strings.Count(etext, "Bathroom:")
 		} else {
 			etext = ""
 			md = template.HTML("")
+			cnt = 0
 		}
 
 		journals = append(journals, Journal{
@@ -74,6 +79,7 @@ func (myjournal *Myjournal) Parse(entry string) (Journals, error) {
 			Tags:      e.Tags,
 			Date:      e.CreationDate,
 			Photo:     photo,
+			Count:     cnt,
 			EntryText: etext,
 			EntryMD:   md,
 		})

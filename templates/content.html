@@ -1,5 +1,34 @@
 {{ define "content" }}
-{{with index .Content 0}}
-{{.EntryMD}}
-{{end}}
+    {{if .IsList}}
+              <div class="table-responsive">
+                <table class="table table-striped">
+                  <thead>
+                    <tr>
+                      <th>Day</th>
+                      <th>Feeling Great?</th>
+                      <th>Bowel Movements</th>
+                      <th>Tags</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+              {{range .Navbar}}
+                    <tr>
+                      <td><a href="/e/{{.Id}}">{{.Title}}</a></td>
+                      <td>{{.Starred}}</td>
+                      <td>{{.Count}}</td>
+                      <td>{{.Tags}}</td>
+                    </tr>
+              {{end}}
+                  </tbody>
+                </table>
+              </div>
+    {{else}}
+        {{with index .Content 0}}
+            <h4>Feeling Great? <small>{{.Starred}}</small></h5>
+            <h4>Bowel Movements: <small>{{.Count}}</small></h5>
+            <h4>Tags: <small>{{.Tags}}</small></h5>
+            {{.EntryMD}}
+        {{end}}
+    {{end}}
 {{ end }}
+
