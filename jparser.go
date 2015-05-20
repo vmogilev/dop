@@ -2,22 +2,25 @@ package main
 
 import (
 	"errors"
+	"html/template"
 	"log"
 	"path/filepath"
 	"sort"
 	"time"
 
 	"github.com/jpoehls/go-dayone"
+	"github.com/russross/blackfriday"
 )
 
 type Journal struct {
-	Id        string      `json:"id"`
-	Title     string      `json:"title"`
-	Starred   bool        `json:"starred"`
-	Tags      []string    `json:"tags"`
-	Date      time.Time   `json:"date"`
-	Photo     interface{} `json:"photo"` // interface is needed here so we can assign "nil" to entry that has no photo
-	EntryText string      `json:"entrytext,omitempty"`
+	Id        string        `json:"id"`
+	Title     string        `json:"title"`
+	Starred   bool          `json:"starred"`
+	Tags      []string      `json:"tags"`
+	Date      time.Time     `json:"date"`
+	Photo     interface{}   `json:"photo"` // interface is needed here so we can assign "nil" to entry that has no photo
+	EntryText string        `json:"entrytext,omitempty"`
+	EntryMD   template.HTML `json:"entrymd,omitempty"`
 }
 
 type Journals []Journal
@@ -39,6 +42,7 @@ func (myjournal *Myjournal) Parse(entry string) (Journals, error) {
 	parse := func(e *dayone.Entry, err error, gettext bool) error {
 		var photo interface{}
 		var etext string
+		var md template.HTML
 
 		if err != nil {
 			return err
@@ -57,8 +61,10 @@ func (myjournal *Myjournal) Parse(entry string) (Journals, error) {
 
 		if gettext {
 			etext = e.EntryText
+			md = template.HTML(blackfriday.MarkdownCommon([]byte(etext)))
 		} else {
 			etext = ""
+			md = template.HTML("")
 		}
 
 		journals = append(journals, Journal{
@@ -69,6 +75,7 @@ func (myjournal *Myjournal) Parse(entry string) (Journals, error) {
 			Date:      e.CreationDate,
 			Photo:     photo,
 			EntryText: etext,
+			EntryMD:   md,
 		})
 		return nil
 	}

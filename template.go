@@ -1,14 +1,15 @@
 package main
 
 import (
+	//"fmt"
 	"html/template"
-	//"log"
 	"net/http"
 )
 
 var templates = template.Must(template.ParseFiles(
 	"templates/base.html",
-	"templates/index.html",
+	"templates/sidebar.html",
+	"templates/content.html",
 ))
 
 type Page struct {
@@ -18,8 +19,8 @@ type Page struct {
 }
 
 func renderTemplate(w http.ResponseWriter, tmpl string, p *Page) {
-	//err := templates.ExecuteTemplate(w, tmpl+".html", j)
 	err := templates.Execute(w, p)
+	//err := templates.ExecuteTemplate(w, tmpl+".html", p)
 	if err != nil {
 		http.Error(w, err.Error(), http.StatusInternalServerError)
 	}

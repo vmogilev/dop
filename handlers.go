@@ -60,5 +60,5 @@ func (mj *Myjournal) Index(w http.ResponseWriter, r *http.Request) {
 	}
 
 	page := Page{Title: "Vitaliy's Food Journal", Navbar: journals, Content: current}
-	renderTemplate(w, "index", &page)
+	renderTemplate(w, "dop", &page)
 }
