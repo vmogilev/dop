@@ -35,6 +35,32 @@ func (a ByDate) Len() int           { return len(a) }
 func (a ByDate) Swap(i, j int)      { a[i], a[j] = a[j], a[i] }
 func (a ByDate) Less(i, j int) bool { return a[i].Date.Before(a[j].Date) }
 
+func (j Journals) CurrPosition(currId string) int {
+	for p, v := range j {
+		if v.Id == currId {
+			return p
+		}
+	}
+	return -1
+}
+
+func (j Journals) NextId(currPos int) string {
+	l := len(j)
+	if currPos+1 < l {
+		return j[currPos+1].Id
+	} else {
+		return ""
+	}
+}
+
+func (j Journals) PrevId(currPos int) string {
+	if currPos > 0 {
+		return j[currPos-1].Id
+	} else {
+		return ""
+	}
+}
+
 func (myjournal *Myjournal) Parse(entry string) (Journals, error) {
 	var err error
 	var journals Journals

@@ -15,6 +15,8 @@ var templates = template.Must(template.ParseFiles(
 type Page struct {
 	Title   string
 	IsList  bool
+	PrevId  string
+	NextId  string
 	Navbar  interface{}
 	Content interface{}
 }

@@ -63,6 +63,19 @@ func (mj *Myjournal) Index(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	page := Page{Title: "Vitaliy's Food Journal", IsList: list, Navbar: journals, Content: current}
+	var nextid string
+	var previd string
+	if currpos := journals.CurrPosition(entry); currpos != -1 {
+		nextid = journals.NextId(currpos)
+		previd = journals.PrevId(currpos)
+	}
+
+	page := Page{Title: "Vitaliy's Food Journal",
+		IsList:  list,
+		PrevId:  previd,
+		NextId:  nextid,
+		Navbar:  journals,
+		Content: current,
+	}
 	renderTemplate(w, "dop", &page)
 }

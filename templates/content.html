@@ -27,8 +27,11 @@
             <h4>Feeling Great? <small>{{.Starred}}</small></h5>
             <h4>Bowel Movements: <small>{{.Count}}</small></h5>
             <h4>Tags: <small>{{.Tags}}</small></h5>
+            <div class="pn-controls">
+                {{if $.PrevId}}<small>[<a href="/e/{{$.PrevId}}">Previous</a>]</small>{{end}}
+                {{if $.NextId}}<small>[<a href="/e/{{$.NextId}}">Next</a>]</small>{{end}}
+            </div>
             {{.EntryMD}}
         {{end}}
     {{end}}
 {{ end }}
-
