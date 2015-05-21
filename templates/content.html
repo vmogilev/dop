@@ -5,7 +5,7 @@
                   <thead>
                     <tr>
                       <th>Day</th>
-                      <th>Feeling Great?</th>
+                      <th>Great Bowel Evac?</th>
                       <th>Bowel Movements</th>
                       <th>Tags</th>
                     </tr>
@@ -28,10 +28,22 @@
             <h4>Bowel Movements: <small>{{.Count}}</small></h5>
             <h4>Tags: <small>{{.Tags}}</small></h5>
             <div class="pn-controls">
-                {{if $.PrevId}}<small>[<a href="/e/{{$.PrevId}}">Previous</a>]</small>{{end}}
-                {{if $.NextId}}<small>[<a href="/e/{{$.NextId}}">Next</a>]</small>{{end}}
+            <nav>
+              <ul class="pager">
+                <li{{if $.PrevId}}{{else}} class="disabled"{{end}}><a href="{{if $.PrevId}}/e/{{$.PrevId}}{{else}}#{{end}}"><span aria-hidden="true">&larr;</span> Previous</a></li>
+                <li{{if $.NextId}}{{else}} class="disabled"{{end}}><a href="{{if $.NextId}}/e/{{$.NextId}}{{else}}#{{end}}">Next <span aria-hidden="true">&rarr;</span></a></li>
+              </ul>
+            </nav>
             </div>
             {{.EntryMD}}
+            <div class="pn-controls">
+            <nav>
+              <ul class="pager">
+                <li{{if $.PrevId}}{{else}} class="disabled"{{end}}><a href="{{if $.PrevId}}/e/{{$.PrevId}}{{else}}#{{end}}"><span aria-hidden="true">&larr;</span> Previous</a></li>
+                <li{{if $.NextId}}{{else}} class="disabled"{{end}}><a href="{{if $.NextId}}/e/{{$.NextId}}{{else}}#{{end}}">Next <span aria-hidden="true">&rarr;</span></a></li>
+              </ul>
+            </nav>
+            </div>
         {{end}}
     {{end}}
 {{ end }}

@@ -95,6 +95,15 @@
             });
         });
         </script>
+
+        <script type="text/javascript">
+        $(document).keyup(function(e) {
+          if (e.keyCode == 27) { // esc
+            window.location = 'http://localhost:8080/'
+          }
+        });
+        </script>
+
     {{end}}
   </body>
 </html>
