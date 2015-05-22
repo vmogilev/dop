@@ -10,6 +10,7 @@ var templates = template.Must(template.ParseFiles(
 	"templates/base.html",
 	"templates/sidebar.html",
 	"templates/content.html",
+	"templates/customjs.html",
 ))
 
 type Page struct {
