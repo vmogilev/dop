@@ -1,7 +1,9 @@
 package main
 
 import (
+	"encoding/json"
 	"flag"
+	"io"
 	"io/ioutil"
 	"log"
 	"net/http"
@@ -10,36 +12,86 @@ import (
 )
 
 type Myjournal struct {
-	dir string
+	Dir       string
+	Title     string
+	CssLookup map[string]string
 }
 
 var myjournal Myjournal
 
+var (
+	Trace   *log.Logger
+	Info    *log.Logger
+	Warning *log.Logger
+	Error   *log.Logger
+)
+
+func Init(
+	traceHandle io.Writer,
+	infoHandle io.Writer,
+	warningHandle io.Writer,
+	errorHandle io.Writer) {
+
+	Trace = log.New(traceHandle,
+		"TRACE: ",
+		log.Ldate|log.Ltime|log.Lshortfile)
+
+	Info = log.New(infoHandle,
+		"INFO: ",
+		log.Ldate|log.Ltime|log.Lshortfile)
+
+	Warning = log.New(warningHandle,
+		"WARNING: ",
+		log.Ldate|log.Ltime|log.Lshortfile)
+
+	Error = log.New(errorHandle,
+		"ERROR: ",
+		log.Ldate|log.Ltime|log.Lshortfile)
+}
+
+func Load(f string) {
+	jData, err := ioutil.ReadFile(filepath.Join(f, "conf", "dop.json"))
+	if err != nil {
+		Error.Fatalf("Unable to read the data file (%s): %s", f, err)
+	}
+	if err := json.Unmarshal(jData, &myjournal); err != nil {
+		Error.Fatalf("Unable to Unmarshal DOP config from data file (%s): %s", jData, err)
+	}
+
+}
+
 func main() {
-	var journal string
+	var dopRoot string
+	var httpHost string
+	var httpPort string
+	var httpMount string
 	var debug bool
-	flag.StringVar(&journal, "journal", "./", "Journal Directory name")
+
+	flag.StringVar(&dopRoot, "dopRoot", "./", "DOP Root Directory [where ./static and ./templates are)")
+	flag.StringVar(&httpHost, "httpHost", "http://localhost", "HTTP Canonical Host Name")
+	flag.StringVar(&httpPort, "httpPort", "8080", "HTTP Port")
+	flag.StringVar(&httpMount, "httpMount", "/", "HTTP Mount Point [EX: /myjournal/")
 	flag.BoolVar(&debug, "debug", false, "Debug")
 	flag.Parse()
 
-	log.SetFlags(log.LstdFlags)
 	if debug {
-		log.SetOutput(os.Stderr)
+		Init(os.Stdout, os.Stdout, os.Stdout, os.Stderr)
 	} else {
-		log.SetOutput(ioutil.Discard)
+		Init(ioutil.Discard, os.Stdout, os.Stdout, os.Stderr)
 	}
 
+	Load(dopRoot)
+	var journal string
+	journal = myjournal.Dir
 	jd := filepath.Join(journal, "entries")
 	files, err := ioutil.ReadDir(jd)
 	if err != nil {
-		log.Fatalf("ERROR: Journal directory is not readable: %s\n", jd)
+		Error.Fatalf("ERROR: Journal directory is not readable: %s\n", jd)
 	}
 
-	log.Printf("Found %d journal entries in %s\n", len(files), journal)
+	Info.Printf("Found %d journal entries in %s\n", len(files), journal)
 
-	myjournal = Myjournal{dir: journal}
+	router := NewRouter(httpMount, dopRoot)
 
-	router := NewRouter()
-
-	log.Fatal(http.ListenAndServe(":8080", router))
+	Info.Fatal(http.ListenAndServe(":"+httpPort, router))
 }

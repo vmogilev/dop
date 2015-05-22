@@ -3,7 +3,6 @@ package main
 import (
 	"errors"
 	"html/template"
-	"log"
 	"path/filepath"
 	"sort"
 	"strings"
@@ -65,7 +64,7 @@ func (myjournal *Myjournal) Parse(entry string) (Journals, error) {
 	var err error
 	var journals Journals
 
-	j := dayone.NewJournal(myjournal.dir)
+	j := dayone.NewJournal(myjournal.Dir)
 
 	parse := func(e *dayone.Entry, err error, gettext bool) error {
 		var photo interface{}
@@ -77,7 +76,7 @@ func (myjournal *Myjournal) Parse(entry string) (Journals, error) {
 			return err
 		}
 
-		log.Printf("Date: %s [%s] %s\n", e.CreationDate.Local(), e.UUID(), e.Tags)
+		Trace.Printf("Date: %s [%s] %s\n", e.CreationDate.Local(), e.UUID(), e.Tags)
 		const layout = "Mon, 02 Jan 2006"
 
 		p, err := j.PhotoStat(e.UUID())
@@ -135,7 +134,7 @@ func (myjournal *Myjournal) Parse(entry string) (Journals, error) {
 	}
 
 	if err != nil {
-		log.Panic(err)
+		Error.Panic(err)
 	}
 
 	sort.Sort(ByDate(journals))

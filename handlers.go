@@ -2,7 +2,6 @@ package main
 
 import (
 	"encoding/json"
-	"log"
 	"net/http"
 
 	"github.com/gorilla/mux"
@@ -12,7 +11,7 @@ func NotFound(id string, w http.ResponseWriter) {
 	w.Header().Set("Content-Type", "application/json; charset=UTF-8")
 	w.WriteHeader(http.StatusNotFound)
 	if err := json.NewEncoder(w).Encode(jsonErr{Code: http.StatusNotFound, Text: "Not Found", Id: id}); err != nil {
-		log.Panic(err)
+		Error.Panic(err)
 	}
 
 }
@@ -32,7 +31,7 @@ func (myjournal *Myjournal) List(w http.ResponseWriter, r *http.Request) {
 
 	b, err := json.MarshalIndent(journals, "", "    ")
 	if err != nil {
-		log.Panicf("ERROR: encoding JSON: %s\n", err)
+		Error.Panicf("ERROR: encoding JSON: %s\n", err)
 	}
 	w.Header().Set("Content-Type", "application/json; charset=UTF-8")
 	w.WriteHeader(http.StatusOK)
@@ -103,7 +102,7 @@ func (mj *Myjournal) Test(w http.ResponseWriter, r *http.Request) {
 	}
 	b, err := json.MarshalIndent(page, "", "    ")
 	if err != nil {
-		log.Panicf("ERROR: encoding JSON: %s\n", err)
+		Error.Panicf("ERROR: encoding JSON: %s\n", err)
 	}
 	w.Header().Set("Content-Type", "application/json; charset=UTF-8")
 	w.WriteHeader(http.StatusOK)
