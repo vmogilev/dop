@@ -1,0 +1,36 @@
+{{ define "customjs" }}
+    {{if .PrevId}}
+        <script type="text/javascript">
+        $(document).ready(function()
+        {
+            $("body").keydown(function(e) {
+              if(e.keyCode == 37) { // left
+                window.location = 'http://localhost:8080/e/{{.PrevId}}'
+              }
+            });
+        });
+        </script>
+    {{end}}
+    {{if .NextId}}
+        <script type="text/javascript">
+        $(document).ready(function()
+        {
+            $("body").keydown(function(e) {
+              if(e.keyCode == 39) { // right
+                window.location = 'http://localhost:8080/e/{{.NextId}}'
+              }
+            });
+        });
+        </script>
+    {{end}}
+    <script type="text/javascript">
+    $(document).ready(function()
+    {
+        $("body").keyup(function(e) {
+            if (e.keyCode == 27) { // esc
+                window.location = 'http://localhost:8080/'
+            }
+        });
+    });
+    </script>
+{{ end }}
