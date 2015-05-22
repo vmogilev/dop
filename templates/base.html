@@ -95,16 +95,17 @@
             });
         });
         </script>
-
-        <script type="text/javascript">
-        $(document).keyup(function(e) {
-          if (e.keyCode == 27) { // esc
-            window.location = 'http://localhost:8080/'
-          }
-        });
-        </script>
-
     {{end}}
+    <script type="text/javascript">
+    $(document).ready(function()
+    {
+        $("body").keyup(function(e) {
+            if (e.keyCode == 27) { // esc
+                window.location = 'http://localhost:8080/'
+            }
+        });
+    });
+    </script>
   </body>
 </html>
 
