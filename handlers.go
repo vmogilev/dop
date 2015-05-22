@@ -70,12 +70,18 @@ func (mj *Myjournal) Index(w http.ResponseWriter, r *http.Request) {
 		previd = journals.PrevId(currpos)
 	}
 
+	var csslookup = make(map[string]string)
+	csslookup["horrible"] = "danger"
+	csslookup["Tarlov"] = "danger"
+	csslookup["IN_experiment"] = "warning"
+
 	page := Page{Title: "Vitaliy's Food Journal",
-		IsList:  list,
-		PrevId:  previd,
-		NextId:  nextid,
-		Navbar:  journals,
-		Content: current,
+		IsList:    list,
+		PrevId:    previd,
+		NextId:    nextid,
+		CssLookup: csslookup,
+		Navbar:    journals,
+		Content:   current,
 	}
 	renderTemplate(w, "dop", &page)
 }

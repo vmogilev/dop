@@ -13,12 +13,13 @@ var templates = template.Must(template.ParseFiles(
 ))
 
 type Page struct {
-	Title   string
-	IsList  bool
-	PrevId  string
-	NextId  string
-	Navbar  interface{}
-	Content interface{}
+	Title     string
+	IsList    bool
+	PrevId    string
+	NextId    string
+	CssLookup map[string]string
+	Navbar    interface{}
+	Content   interface{}
 }
 
 func renderTemplate(w http.ResponseWriter, tmpl string, p *Page) {

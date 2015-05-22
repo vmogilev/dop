@@ -22,7 +22,8 @@
                       <td><span class="badge">{{.Count}}</span></td>
                       <td>
                       {{range .Tags}}
-                        <span class="label label-info">{{.}}</span>
+                        {{ $css := index $.CssLookup . }}
+                        <span class="label label-{{if $css}}{{$css}}{{else}}info{{end}}">{{.}}</span>
                       {{end}}
                       </td>
                     </tr>
@@ -34,7 +35,7 @@
         {{with index .Content 0}}
             <h4>Great Bowel Evacuation? {{if .Starred}}<span class="label label-success">YES!</span>{{else}}<span class="label label-warning">no</span>{{end}}</h4>
             <h4>Bowel Movements: <span class="badge">{{.Count}}</span></h4>
-            <h4>Tags: {{range .Tags}}<span class="label label-info">{{.}}</span> {{end}}</h4>
+            <h4>Tags:{{range .Tags}}{{ $css := index $.CssLookup . }} <span class="label label-{{if $css}}{{$css}}{{else}}info{{end}}">{{.}}</span>{{end}}</h4>
             <div class="pn-controls">
             <nav>
               <ul class="pager">
