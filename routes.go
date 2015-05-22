@@ -36,4 +36,10 @@ var routes = Routes{
 		"/entry/{entryId}",
 		myjournal.List,
 	},
+	Route{
+		"Test",
+		"GET",
+		"/test",
+		myjournal.Test,
+	},
 }
