@@ -15,7 +15,7 @@ func MountPoint(httpMount string) string {
 	}
 }
 
-func NewRouter(httpMount string, dopRoot string) *mux.Router {
+func NewRouter(httpMount string, dopRoot string, photos string) *mux.Router {
 
 	mp := MountPoint(httpMount)
 
@@ -38,6 +38,7 @@ func NewRouter(httpMount string, dopRoot string) *mux.Router {
 	//router.PathPrefix("/").Handler(Logger(http.StripPrefix("/static/", http.FileServer(http.Dir("./static/"))), "Static"))
 	//router.PathPrefix("/").Handler(Logger(http.FileServer(http.Dir("./static/")), "Static"))
 	//router.PathPrefix(mp + "/").Handler(Logger(http.FileServer(http.Dir(filepath.Join(dopRoot, "static"))), "Static"))
+	router.PathPrefix(mp + "/photos").Handler(http.StripPrefix(mp+"/photos", Logger(http.FileServer(http.Dir(photos)), "Photos")))
 	router.PathPrefix(mp + "/").Handler(http.StripPrefix(mp+"/", Logger(http.FileServer(http.Dir(filepath.Join(dopRoot, "static"))), "Static")))
 
 	return router

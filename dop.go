@@ -100,7 +100,8 @@ func main() {
 
 	Info.Printf("Found %d journal entries in %s\n", len(files), journal)
 
-	router := NewRouter(httpMount, dopRoot)
+	photos := filepath.Join(journal, "photos")
+	router := NewRouter(httpMount, dopRoot, photos)
 
 	Info.Fatal(http.ListenAndServe(":"+httpPort, router))
 }
