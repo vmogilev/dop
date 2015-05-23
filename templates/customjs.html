@@ -5,7 +5,7 @@
         {
             $("body").keydown(function(e) {
               if(e.keyCode == 37) { // left
-                window.location = '{{$.HttpFQDN}}e/{{.PrevId}}'
+                window.location = '{{$.HttpFQDN}}/e/{{.PrevId}}'
               }
             });
         });
@@ -17,7 +17,7 @@
         {
             $("body").keydown(function(e) {
               if(e.keyCode == 39) { // right
-                window.location = '{{$.HttpFQDN}}e/{{.NextId}}'
+                window.location = '{{$.HttpFQDN}}/e/{{.NextId}}'
               }
             });
         });
@@ -28,7 +28,7 @@
     {
         $("body").keyup(function(e) {
             if (e.keyCode == 27) { // esc
-                window.location = '{{$.HttpFQDN}}'
+                window.location = '{{$.HttpFQDN}}/'
             }
         });
     });

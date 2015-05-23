@@ -72,7 +72,7 @@ func main() {
 	flag.StringVar(&dopRoot, "dopRoot", "./", "DOP Root Directory [where ./static and ./templates are)")
 	flag.StringVar(&httpHost, "httpHost", "http://localhost", "HTTP Host Name")
 	flag.StringVar(&httpPort, "httpPort", "8080", "HTTP Port")
-	flag.StringVar(&httpMount, "httpMount", "/", "HTTP Mount Point [EX: /myjournal/")
+	flag.StringVar(&httpMount, "httpMount", "/", "HTTP Mount Point [EX: /myjournal")
 	flag.BoolVar(&debug, "debug", false, "Debug")
 	flag.Parse()
 
@@ -83,10 +83,11 @@ func main() {
 	}
 
 	Load(dopRoot)
+	mp := MountPoint(httpMount)
 	if httpPort == "80" {
-		myjournal.HttpFQDN = httpHost + httpMount
+		myjournal.HttpFQDN = httpHost + mp
 	} else {
-		myjournal.HttpFQDN = httpHost + ":" + httpPort + httpMount
+		myjournal.HttpFQDN = httpHost + ":" + httpPort + mp
 	}
 
 	var journal string
