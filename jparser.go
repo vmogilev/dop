@@ -3,7 +3,6 @@ package main
 import (
 	"errors"
 	"html/template"
-	"path/filepath"
 	"sort"
 	"strings"
 	"time"
@@ -82,7 +81,8 @@ func (myjournal *Myjournal) Parse(entry string) (Journals, error) {
 		p, err := j.PhotoStat(e.UUID())
 		if (err == nil) && (p != nil) {
 			//photo = filepath.Join(journal, "photos", p.Name())
-			photo = filepath.Join("photos", p.Name())
+			//photo = filepath.Join("photos", p.Name())
+			photo = p.Name()
 		} else {
 			photo = nil
 		}

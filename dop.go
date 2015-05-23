@@ -59,6 +59,7 @@ func Load(f string) {
 	if err := json.Unmarshal(jData, &myjournal); err != nil {
 		Error.Fatalf("Unable to Unmarshal DOP config from data file (%s): %s", jData, err)
 	}
+	Info.Println(myjournal)
 
 }
 
