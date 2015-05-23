@@ -14,7 +14,9 @@ import (
 type Myjournal struct {
 	Dir       string
 	Title     string
+	Count     string
 	CssLookup map[string]string
+	HttpFQDN  string
 }
 
 var myjournal Myjournal
@@ -68,7 +70,7 @@ func main() {
 	var debug bool
 
 	flag.StringVar(&dopRoot, "dopRoot", "./", "DOP Root Directory [where ./static and ./templates are)")
-	flag.StringVar(&httpHost, "httpHost", "http://localhost", "HTTP Canonical Host Name")
+	flag.StringVar(&httpHost, "httpHost", "http://localhost", "HTTP Host Name")
 	flag.StringVar(&httpPort, "httpPort", "8080", "HTTP Port")
 	flag.StringVar(&httpMount, "httpMount", "/", "HTTP Mount Point [EX: /myjournal/")
 	flag.BoolVar(&debug, "debug", false, "Debug")
@@ -81,6 +83,12 @@ func main() {
 	}
 
 	Load(dopRoot)
+	if httpPort == "80" {
+		myjournal.HttpFQDN = httpHost + httpMount
+	} else {
+		myjournal.HttpFQDN = httpHost + ":" + httpPort + httpMount
+	}
+
 	var journal string
 	journal = myjournal.Dir
 	jd := filepath.Join(journal, "entries")

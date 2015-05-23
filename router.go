@@ -10,6 +10,8 @@ import (
 func NewRouter(httpMount string, dopRoot string) *mux.Router {
 
 	router := mux.NewRouter().StrictSlash(true)
+	//router.PathPrefix(httpMount)
+
 	for _, route := range routes {
 		var handler http.Handler
 
@@ -26,6 +28,7 @@ func NewRouter(httpMount string, dopRoot string) *mux.Router {
 	//router.PathPrefix("/").Handler(Logger(http.StripPrefix("/static/", http.FileServer(http.Dir("./static/"))), "Static"))
 	//router.PathPrefix("/").Handler(Logger(http.FileServer(http.Dir("./static/")), "Static"))
 	router.PathPrefix(httpMount).Handler(Logger(http.FileServer(http.Dir(filepath.Join(dopRoot, "static"))), "Static"))
+	//router.Methods("GET").Path(httpMount).Name("Static").Handler(Logger(http.FileServer(http.Dir(filepath.Join(dopRoot, "static"))), "Static"))
 
 	return router
 }

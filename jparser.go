@@ -90,7 +90,7 @@ func (myjournal *Myjournal) Parse(entry string) (Journals, error) {
 		if gettext {
 			etext = e.EntryText
 			md = template.HTML(blackfriday.MarkdownCommon([]byte(etext)))
-			cnt = strings.Count(etext, "Bathroom:")
+			cnt = strings.Count(etext, myjournal.Count)
 		} else {
 			etext = ""
 			md = template.HTML("")

@@ -74,6 +74,7 @@ func (mj *Myjournal) Index(w http.ResponseWriter, r *http.Request) {
 		IsList:    list,
 		PrevId:    previd,
 		NextId:    nextid,
+		HttpFQDN:  mj.HttpFQDN,
 		CssLookup: mj.CssLookup,
 		Navbar:    journals,
 		Content:   current,
