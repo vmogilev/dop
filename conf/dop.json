@@ -5,6 +5,7 @@
     "CssLookup": {
         "IN_experiment": "warning",
         "Tarlov": "danger",
-        "horrible": "danger"
+        "horrible": "danger",
+        "amazing": "success"
     }
 }
