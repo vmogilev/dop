@@ -3,6 +3,9 @@
         <script type="text/javascript">
         $(document).ready(function()
         {
+            if(e.target.nodeName.toLowerCase() === 'input'){
+                return;
+            }
             $("body").keydown(function(e) {
               if(e.keyCode == 37) { // left
                 window.location = '{{$.HttpFQDN}}/e/{{.PrevId}}'
@@ -15,6 +18,9 @@
         <script type="text/javascript">
         $(document).ready(function()
         {
+            if(e.target.nodeName.toLowerCase() === 'input'){
+                return;
+            }
             $("body").keydown(function(e) {
               if(e.keyCode == 39) { // right
                 window.location = '{{$.HttpFQDN}}/e/{{.NextId}}'
