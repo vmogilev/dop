@@ -19,6 +19,18 @@ var routes = Routes{
 		myjournal.Index,
 	},
 	Route{
+		"SearchEmpty",
+		"GET",
+		"/s/term=",
+		myjournal.Index,
+	},
+	Route{
+		"Search",
+		"GET",
+		"/s/term={term}",
+		myjournal.Index,
+	},
+	Route{
 		"Entry",
 		"GET",
 		"/e/{entryId}",

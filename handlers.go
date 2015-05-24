@@ -23,7 +23,7 @@ func (myjournal *Myjournal) List(w http.ResponseWriter, r *http.Request) {
 	var journals Journals
 
 	entry = vars["entryId"]
-	journals, err = myjournal.Parse(entry)
+	journals, err = myjournal.Parse(entry, "")
 	if (err != nil) && (err.Error() == "NotFound") {
 		NotFound(entry, w)
 		return
@@ -45,18 +45,24 @@ func (mj *Myjournal) Index(w http.ResponseWriter, r *http.Request) {
 	var journals Journals
 	var current Journals
 	var list bool
+	var search string
 
-	journals, err = myjournal.Parse("*")
+	search = vars["term"]
+	journals, err = myjournal.Parse("*", search)
 
 	entry = vars["entryId"]
 	if entry == "" {
-		entry = journals[0].Id
 		list = true
+		if len(journals) > 0 {
+			entry = journals[0].Id
+		} else {
+			entry = ""
+		}
 	} else {
 		list = false
 	}
 
-	current, err = myjournal.Parse(entry)
+	current, err = myjournal.Parse(entry, "")
 	if (err != nil) && (err.Error() == "NotFound") {
 		NotFound(entry, w)
 		return
@@ -75,6 +81,7 @@ func (mj *Myjournal) Index(w http.ResponseWriter, r *http.Request) {
 		PrevId:    previd,
 		NextId:    nextid,
 		HttpFQDN:  mj.HttpFQDN,
+		Search:    search,
 		CssLookup: mj.CssLookup,
 		Navbar:    journals,
 		Content:   current,

@@ -19,6 +19,7 @@ type Page struct {
 	PrevId    string
 	NextId    string
 	HttpFQDN  string
+	Search    string
 	CssLookup map[string]string
 	Navbar    interface{}
 	Content   interface{}

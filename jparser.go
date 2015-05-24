@@ -59,17 +59,18 @@ func (j Journals) PrevId(currPos int) string {
 	}
 }
 
-func (myjournal *Myjournal) Parse(entry string) (Journals, error) {
+func (myjournal *Myjournal) Parse(entry string, s string) (Journals, error) {
 	var err error
 	var journals Journals
 
 	j := dayone.NewJournal(myjournal.Dir)
 
-	parse := func(e *dayone.Entry, err error, gettext bool) error {
+	parse := func(e *dayone.Entry, err error, gettext bool, search string) error {
 		var photo interface{}
 		var etext string
 		var md template.HTML
 		var cnt int
+		var serp int
 
 		if err != nil {
 			return err
@@ -97,17 +98,25 @@ func (myjournal *Myjournal) Parse(entry string) (Journals, error) {
 			cnt = 0
 		}
 
-		journals = append(journals, Journal{
-			Id:        e.UUID(),
-			Title:     e.CreationDate.Local().Format(layout),
-			Starred:   e.Starred,
-			Tags:      e.Tags,
-			Date:      e.CreationDate,
-			Photo:     photo,
-			Count:     cnt,
-			EntryText: etext,
-			EntryMD:   md,
-		})
+		if (search != "") && (gettext) {
+			serp = strings.Count(etext, search)
+		} else {
+			serp = 1
+		}
+
+		if serp > 0 {
+			journals = append(journals, Journal{
+				Id:        e.UUID(),
+				Title:     e.CreationDate.Local().Format(layout),
+				Starred:   e.Starred,
+				Tags:      e.Tags,
+				Date:      e.CreationDate,
+				Photo:     photo,
+				Count:     cnt,
+				EntryText: etext,
+				EntryMD:   md,
+			})
+		}
 		return nil
 	}
 
@@ -117,7 +126,7 @@ func (myjournal *Myjournal) Parse(entry string) (Journals, error) {
 		if err != nil {
 			return nil, errors.New("NotFound")
 		}
-		err = parse(e, nil, true)
+		err = parse(e, nil, true, "")
 
 	} else {
 		if entry == "*" {
@@ -127,7 +136,7 @@ func (myjournal *Myjournal) Parse(entry string) (Journals, error) {
 		}
 		// closure to wrap the extra param
 		err = j.Read(func(e *dayone.Entry, err error) error {
-			return parse(e, err, parseall)
+			return parse(e, err, parseall, s)
 			//return err
 
 		})
