@@ -3,13 +3,13 @@
         <script type="text/javascript">
         $(document).ready(function()
         {
-            if(e.target.nodeName.toLowerCase() === 'input'){
-                return;
-            }
             $("body").keydown(function(e) {
-              if(e.keyCode == 37) { // left
-                window.location = '{{$.HttpFQDN}}/e/{{.PrevId}}'
-              }
+                if(e.target.nodeName.toLowerCase() == 'input'){
+                    return;
+                }
+                if(e.keyCode == 37) { // left
+                    window.location = '{{$.HttpFQDN}}/e/{{.PrevId}}'
+                }
             });
         });
         </script>
@@ -18,13 +18,14 @@
         <script type="text/javascript">
         $(document).ready(function()
         {
-            if(e.target.nodeName.toLowerCase() === 'input'){
-                return;
-            }
             $("body").keydown(function(e) {
-              if(e.keyCode == 39) { // right
-                window.location = '{{$.HttpFQDN}}/e/{{.NextId}}'
-              }
+                if(e.target.nodeName.toLowerCase() == 'input'){
+                    return;
+                }
+
+                if(e.keyCode == 39) { // right
+                    window.location = '{{$.HttpFQDN}}/e/{{.NextId}}'
+                }
             });
         });
         </script>
