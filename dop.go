@@ -70,10 +70,10 @@ func main() {
 	var httpMount string
 	var debug bool
 
-	flag.StringVar(&dopRoot, "dopRoot", "./", "DOP Root Directory [where ./static and ./templates are)")
+	flag.StringVar(&dopRoot, "dopRoot", "./", "DOP Root Directory [where the ./conf, ./static and ./templates dirs are]")
 	flag.StringVar(&httpHost, "httpHost", "http://localhost", "HTTP Host Name")
 	flag.StringVar(&httpPort, "httpPort", "8080", "HTTP Port")
-	flag.StringVar(&httpMount, "httpMount", "/", "HTTP Mount Point [EX: /myjournal")
+	flag.StringVar(&httpMount, "httpMount", "/", "HTTP Mount Point [EX: /myjournal]")
 	flag.BoolVar(&debug, "debug", false, "Debug")
 	flag.Parse()
 

@@ -59,6 +59,11 @@ func (j Journals) PrevId(currPos int) string {
 	}
 }
 
+func GrepI(s, substr string) bool {
+	s, substr = strings.ToUpper(s), strings.ToUpper(substr)
+	return strings.Contains(s, substr)
+}
+
 func (myjournal *Myjournal) Parse(entry string, s string) (Journals, error) {
 	var err error
 	var journals Journals
@@ -70,7 +75,7 @@ func (myjournal *Myjournal) Parse(entry string, s string) (Journals, error) {
 		var etext string
 		var md template.HTML
 		var cnt int
-		var serp int
+		var serp bool
 
 		if err != nil {
 			return err
@@ -99,12 +104,12 @@ func (myjournal *Myjournal) Parse(entry string, s string) (Journals, error) {
 		}
 
 		if (search != "") && (gettext) {
-			serp = strings.Count(etext, search)
+			serp = GrepI(etext, search)
 		} else {
-			serp = 1
+			serp = true
 		}
 
-		if serp > 0 {
+		if serp {
 			journals = append(journals, Journal{
 				Id:        e.UUID(),
 				Title:     e.CreationDate.Local().Format(layout),
