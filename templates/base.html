@@ -44,7 +44,7 @@
             <!-- <li><a href="#">Profile</a></li>-->
             <!-- <li><a href="#">Help</a></li>-->
           </ul>
-          <form id="navsearch" class="navbar-form navbar-right" method="get">
+          <form id="navsearch" class="navbar-form navbar-right" action="{{.HttpFQDN}}/s/" method="get">
             <input name="term" type="text" class="form-control" value="{{.Search}}" placeholder="Search...">
           </form>
         </div>

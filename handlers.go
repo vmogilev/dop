@@ -3,6 +3,7 @@ package main
 import (
 	"encoding/json"
 	"net/http"
+	"strings"
 
 	"github.com/gorilla/mux"
 )
@@ -47,7 +48,7 @@ func (mj *Myjournal) Index(w http.ResponseWriter, r *http.Request) {
 	var list bool
 	var search string
 
-	search = vars["term"]
+	search = strings.Replace(vars["term"], "+", " ", -1)
 	journals, err = myjournal.Parse("*", search)
 
 	entry = vars["entryId"]
