@@ -1,10 +1,11 @@
 {{ define "content" }}
     {{if .IsList}}
-    <p class="text-left">Abbreviations:
-    <abbr title="Was it a Great Bowel Evac?" class="initialism">GBE</abbr>
-    <abbr title="Number of Bowel Movements" class="initialism">NBM</abbr>
-    <abbr title="Daily Tags - see entry for details" class="initialism">Tags</abbr>
-    </p>
+    <dl>
+      <dt>Abbreviations:</dt>
+        <dd><abbr title="Was it a Great Bowel Evac?" class="initialism">GBE:</abbr> <small>Was it a Great Bowel Evac?</small></dd>
+        <dd><abbr title="Number of Bowel Movements" class="initialism">NBM:</abbr> <small>Number of Bowel Movements</small></dd>
+        <dd><abbr title="Daily Tags - see entry for details" class="initialism">Tags:</abbr> <small>Daily Tags - see daily entry for details</small></dd>
+    </dl>
               <div class="table-responsive">
                 <table class="table table-striped">
                   <thead>
