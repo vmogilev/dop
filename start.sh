@@ -21,7 +21,7 @@ fi
 nohup $GOPATH/bin/dop -dopRoot="${DOPROOT}" \
     -httpHost="${HTTPHOST}" \
     -httpMount="${HTTPMOUNT}" \
-    -httpPort="${HTTPPORT}" >> ${DOPROOT}/server.log 2>&1 </dev/null
+    -httpPort="${HTTPPORT}" >> ${DOPROOT}/server.log 2>&1 </dev/null &
 
 tail -30 ${DOPROOT}/server.log
 
