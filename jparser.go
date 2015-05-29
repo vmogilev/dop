@@ -29,9 +29,11 @@ type Journals []Journal
 // the Date field.
 type ByDate []Journal
 
-func (a ByDate) Len() int           { return len(a) }
-func (a ByDate) Swap(i, j int)      { a[i], a[j] = a[j], a[i] }
-func (a ByDate) Less(i, j int) bool { return a[i].Date.Before(a[j].Date) }
+func (a ByDate) Len() int      { return len(a) }
+func (a ByDate) Swap(i, j int) { a[i], a[j] = a[j], a[i] }
+
+//func (a ByDate) Less(i, j int) bool { return a[i].Date.Before(a[j].Date) }
+func (a ByDate) Less(i, j int) bool { return a[i].Date.After(a[j].Date) }
 
 func (j Journals) CurrPosition(currId string) int {
 	for p, v := range j {
