@@ -61,6 +61,7 @@ func Load(f string) {
 		Error.Fatalf("Unable to Unmarshal DOP config from data file (%s): %s", jData, err)
 	}
 	myjournal.TemplateDIR = filepath.Join(f, "templates")
+	compileTemplate(myjournal.TemplateDIR)
 	Info.Println(myjournal)
 
 }

@@ -7,12 +7,16 @@ import (
 	"path/filepath"
 )
 
-var templates = template.Must(template.ParseFiles(
-	filepath.Join(myjournal.TemplateDIR, "base.html"),
-	filepath.Join(myjournal.TemplateDIR, "sidebar.html"),
-	filepath.Join(myjournal.TemplateDIR, "content.html"),
-	filepath.Join(myjournal.TemplateDIR, "customjs.html"),
-))
+var templates *template.Template
+
+func compileTemplate(p string) {
+	templates = template.Must(template.ParseFiles(
+		filepath.Join(p, "base.html"),
+		filepath.Join(p, "sidebar.html"),
+		filepath.Join(p, "content.html"),
+		filepath.Join(p, "customjs.html"),
+	))
+}
 
 type Page struct {
 	Title     string
