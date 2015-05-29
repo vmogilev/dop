@@ -18,7 +18,7 @@ else
 fi
 
 
-$GOBIN/dop -dopRoot="${DOPROOT}" \
+$GOPATH/bin/dop -dopRoot="${DOPROOT}" \
     -httpHost="${HTTPHOST}" \
     -httpMount="${HTTPMOUNT}" \
     -httpPort="${HTTPPORT}" >> ${DOPROOT}/server.log 2>&1

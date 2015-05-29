@@ -4,13 +4,14 @@ import (
 	//"fmt"
 	"html/template"
 	"net/http"
+	"path/filepath"
 )
 
 var templates = template.Must(template.ParseFiles(
-	"templates/base.html",
-	"templates/sidebar.html",
-	"templates/content.html",
-	"templates/customjs.html",
+	filepath.Join(myjournal.TemplateDIR, "templates/base.html"),
+	filepath.Join(myjournal.TemplateDIR, "templates/sidebar.html"),
+	filepath.Join(myjournal.TemplateDIR, "templates/content.html"),
+	filepath.Join(myjournal.TemplateDIR, "templates/customjs.html"),
 ))
 
 type Page struct {
