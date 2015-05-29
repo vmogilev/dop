@@ -8,10 +8,10 @@ import (
 )
 
 var templates = template.Must(template.ParseFiles(
-	filepath.Join(myjournal.TemplateDIR, "templates/base.html"),
-	filepath.Join(myjournal.TemplateDIR, "templates/sidebar.html"),
-	filepath.Join(myjournal.TemplateDIR, "templates/content.html"),
-	filepath.Join(myjournal.TemplateDIR, "templates/customjs.html"),
+	filepath.Join(myjournal.TemplateDIR, "base.html"),
+	filepath.Join(myjournal.TemplateDIR, "sidebar.html"),
+	filepath.Join(myjournal.TemplateDIR, "content.html"),
+	filepath.Join(myjournal.TemplateDIR, "customjs.html"),
 ))
 
 type Page struct {
