@@ -39,4 +39,6 @@ Start it:
 
     ./stop.sh
 
+## License
 
+Apache License Version 2.0
