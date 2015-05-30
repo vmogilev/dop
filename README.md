@@ -28,9 +28,11 @@ Modify conf/dop.env and define HTTP Host variables (see example configuration)
 ## Startup
 
 Source the conf/dop.env:
+
     . conf/dop.env
 
 Start it:
+
     ./start.sh
 
 ## Stop
