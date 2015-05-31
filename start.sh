@@ -18,9 +18,11 @@ else
 fi
 
 
-nohup $GOPATH/bin/dop -dopRoot="${DOPROOT}" \
+nohup $GOPATH/bin/dop \
+    -dopRoot="${DOPROOT}" \
     -httpHost="${HTTPHOST}" \
     -httpMount="${HTTPMOUNT}" \
-    -httpPort="${HTTPPORT}" >> ${DOPROOT}/server.log 2>&1 </dev/null &
+    -httpPort="${HTTPPORT}" \
+    -httpHostExt="${HTTPHOSTEXT}" >> ${DOPROOT}/server.log 2>&1 </dev/null &
 
 
