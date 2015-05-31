@@ -11,9 +11,15 @@ func Logger(inner http.Handler, name string) http.Handler {
 
 		inner.ServeHTTP(w, r)
 
+		var client string
+		client = r.Header.Get("X-Forwarded-For")
+		if client == "" {
+			client = r.RemoteAddr
+		}
+
 		Info.Printf(
 			"%s\t%s\t%s\t%s\t%s",
-			r.RemoteAddr,
+			client,
 			r.Method,
 			r.RequestURI,
 			name,
