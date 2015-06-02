@@ -18,12 +18,13 @@ func Logger(inner http.Handler, name string) http.Handler {
 		}
 
 		Info.Printf(
-			"%s\t%s\t%s\t%s\t%s",
+			"%s\t%s\t%s\t%s\t%s\t%s",
 			client,
-			r.Method,
-			r.RequestURI,
-			name,
 			time.Since(start),
+			r.Method,
+			name,
+			r.RequestURI,
+			r.Referer(),
 		)
 	})
 }
