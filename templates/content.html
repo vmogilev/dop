@@ -39,24 +39,24 @@
               </div>
     {{else}}
         {{with index .Content 0}}
-            <h4>Great Bowel Evacuation? {{if .Starred}}<span class="label label-success">YES!</span>{{else}}<span class="label label-warning">no</span>{{end}}</h4>
-            <h4>Bowel Movements: <span class="badge">{{.Count}}</span></h4>
-            <h4>{{range .Tags}}{{ $css := index $.CssLookup . }}<span class="label label-{{if $css}}{{$css}}{{else}}info{{end}}">{{.}}</span> {{end}}</h4>
             <div class="pn-controls">
             <nav>
               <ul class="pager">
-                <li{{if $.PrevId}}{{else}} class="disabled"{{end}}><a href="{{if $.PrevId}}{{$.HttpFQDN}}/e/{{$.PrevId}}{{else}}#{{end}}"><span aria-hidden="true">&larr;</span> Previous</a></li>
-                <li{{if $.NextId}}{{else}} class="disabled"{{end}}><a href="{{if $.NextId}}{{$.HttpFQDN}}/e/{{$.NextId}}{{else}}#{{end}}">Next <span aria-hidden="true">&rarr;</span></a></li>
+                <li{{if $.PrevId}}{{else}} class="disabled"{{end}}><a href="{{if $.PrevId}}{{$.HttpFQDN}}/e/{{$.PrevId}}{{else}}#{{end}}"><span aria-hidden="true">&larr;</span></a></li>
+                <li{{if $.NextId}}{{else}} class="disabled"{{end}}><a href="{{if $.NextId}}{{$.HttpFQDN}}/e/{{$.NextId}}{{else}}#{{end}}"><span aria-hidden="true">&rarr;</span></a></li>
               </ul>
             </nav>
             </div>
+            <h4>Great Bowel Evacuation? {{if .Starred}}<span class="label label-success">YES!</span>{{else}}<span class="label label-warning">no</span>{{end}}</h4>
+            <h4>Bowel Movements: <span class="badge">{{.Count}}</span></h4>
+            <h4>{{range .Tags}}{{ $css := index $.CssLookup . }}<span class="label label-{{if $css}}{{$css}}{{else}}info{{end}}">{{.}}</span> {{end}}</h4>
             {{if .Photo}}<img src="{{$.HttpFQDN}}/photos/{{.Photo}}" width="60%" alt="Photo">{{end}}
             {{.EntryMD}}
             <div class="pn-controls">
             <nav>
               <ul class="pager">
-                <li{{if $.PrevId}}{{else}} class="disabled"{{end}}><a href="{{if $.PrevId}}{{$.HttpFQDN}}/e/{{$.PrevId}}{{else}}#{{end}}"><span aria-hidden="true">&larr;</span> Previous</a></li>
-                <li{{if $.NextId}}{{else}} class="disabled"{{end}}><a href="{{if $.NextId}}{{$.HttpFQDN}}/e/{{$.NextId}}{{else}}#{{end}}">Next <span aria-hidden="true">&rarr;</span></a></li>
+                <li{{if $.PrevId}}{{else}} class="disabled"{{end}}><a href="{{if $.PrevId}}{{$.HttpFQDN}}/e/{{$.PrevId}}{{else}}#{{end}}"><span aria-hidden="true">&larr;</span></a></li>
+                <li{{if $.NextId}}{{else}} class="disabled"{{end}}><a href="{{if $.NextId}}{{$.HttpFQDN}}/e/{{$.NextId}}{{else}}#{{end}}"><span aria-hidden="true">&rarr;</span></a></li>
               </ul>
             </nav>
             </div>
