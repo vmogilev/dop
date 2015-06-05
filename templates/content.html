@@ -11,6 +11,7 @@
                   <thead>
                     <tr>
                       <th>Day</th>
+                      <th>Img</th>
                       <th>GBE</th>
                       <th>NBM</th>
                       <th>Tags</th>
@@ -20,6 +21,7 @@
               {{range .Navbar}}
                     <tr>
                       <td><a href="{{$.HttpFQDN}}/e/{{.Id}}">{{.Title}}</a></td>
+                      <td>{{if .Photo}}<img src="{{$.HttpFQDN}}/photos/{{.Thumb}}" alt="Photo">{{end}}</td>
                   {{if .Starred}}
                       <td><span class="label label-success">YES!</span></td>
                   {{else}}
@@ -50,7 +52,7 @@
             <h4>Great Bowel Evacuation? {{if .Starred}}<span class="label label-success">YES!</span>{{else}}<span class="label label-warning">no</span>{{end}}</h4>
             <h4>Bowel Movements: <span class="badge">{{.Count}}</span></h4>
             <h4>{{range .Tags}}{{ $css := index $.CssLookup . }}<span class="label label-{{if $css}}{{$css}}{{else}}info{{end}}">{{.}}</span> {{end}}</h4>
-            {{if .Photo}}<img src="{{$.HttpFQDN}}/photos/{{.Photo}}" width="60%" alt="Photo">{{end}}
+            {{if .Photo}}<img src="{{$.HttpFQDN}}/photos/{{.Small}}" alt="Photo">{{end}}
             {{.EntryMD}}
             <div class="pn-controls">
             <nav>

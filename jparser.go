@@ -3,6 +3,7 @@ package main
 import (
 	"errors"
 	"html/template"
+	"path/filepath"
 	"sort"
 	"strings"
 	"time"
@@ -18,6 +19,8 @@ type Journal struct {
 	Tags      []string      `json:"tags"`
 	Date      time.Time     `json:"date"`
 	Photo     interface{}   `json:"photo"` // interface is needed here so we can assign "nil" to entry that has no photo
+	Thumb     interface{}   `json:"photo"` // interface is needed here so we can assign "nil" to entry that has no photo
+	Small     interface{}   `json:"photo"` // interface is needed here so we can assign "nil" to entry that has no photo
 	Count     int           `json:"count"`
 	EntryText string        `json:"entrytext,omitempty"`
 	EntryMD   template.HTML `json:"-"`
@@ -74,6 +77,8 @@ func (myjournal *Myjournal) Parse(entry string, s string) (Journals, error) {
 
 	parse := func(e *dayone.Entry, err error, gettext bool, search string) error {
 		var photo interface{}
+		var thumb interface{}
+		var small interface{}
 		var etext string
 		var md template.HTML
 		var cnt int
@@ -91,8 +96,12 @@ func (myjournal *Myjournal) Parse(entry string, s string) (Journals, error) {
 			//photo = filepath.Join(journal, "photos", p.Name())
 			//photo = filepath.Join("photos", p.Name())
 			photo = p.Name()
+			thumb = MakeThumbnail(filepath.Join(myjournal.Dir, "photos"), photo.(string), 28, 28)
+			small = MakeThumbnail(filepath.Join(myjournal.Dir, "photos"), photo.(string), 640, 0)
 		} else {
 			photo = nil
+			thumb = nil
+			small = nil
 		}
 
 		if gettext {
@@ -119,6 +128,8 @@ func (myjournal *Myjournal) Parse(entry string, s string) (Journals, error) {
 				Tags:      e.Tags,
 				Date:      e.CreationDate,
 				Photo:     photo,
+				Thumb:     thumb,
+				Small:     small,
 				Count:     cnt,
 				EntryText: etext,
 				EntryMD:   md,
