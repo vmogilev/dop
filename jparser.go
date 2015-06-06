@@ -98,8 +98,10 @@ func (myjournal *Myjournal) Parse(entry string, s string) (Journals, error) {
 			//photo = filepath.Join(journal, "photos", p.Name())
 			//photo = filepath.Join("photos", p.Name())
 			photo = p.Name()
-			thumb = MakeThumbnail(filepath.Join(myjournal.Dir, "photos"), photo.(string), 28, 28)
-			small = MakeThumbnail(filepath.Join(myjournal.Dir, "photos"), photo.(string), 640, 0)
+			//thumb = MakeThumbnail(filepath.Join(myjournal.Dir, "photos"), photo.(string), 28, 28)
+			//small = MakeThumbnail(filepath.Join(myjournal.Dir, "photos"), photo.(string), 640, 0)
+			thumb = MakeThumbnailVIPS(filepath.Join(myjournal.Dir, "photos"), photo.(string), 28, 28)
+			small = MakeThumbnailVIPS(filepath.Join(myjournal.Dir, "photos"), photo.(string), 640, 0)
 		} else {
 			photo = nil
 			thumb = nil
