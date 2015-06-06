@@ -47,7 +47,8 @@ func (j Journals) CurrPosition(currId string) int {
 	return -1
 }
 
-func (j Journals) NextId(currPos int) string {
+// Note: the sort is now reversed that why Prev is Next and Next is Prev
+func (j Journals) PrevId(currPos int) string {
 	l := len(j)
 	if currPos+1 < l {
 		return j[currPos+1].Id
@@ -56,7 +57,8 @@ func (j Journals) NextId(currPos int) string {
 	}
 }
 
-func (j Journals) PrevId(currPos int) string {
+// Note: the sort is now reversed that why Prev is Next and Next is Prev
+func (j Journals) NextId(currPos int) string {
 	if currPos > 0 {
 		return j[currPos-1].Id
 	} else {
