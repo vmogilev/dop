@@ -9,6 +9,7 @@ import (
 	"time"
 
 	"github.com/jpoehls/go-dayone"
+	"github.com/rigingo/dlog"
 	"github.com/russross/blackfriday"
 )
 
@@ -90,7 +91,7 @@ func (myjournal *Myjournal) Parse(entry string, s string) (Journals, error) {
 			return err
 		}
 
-		Trace.Printf("Date: %s [%s] %s\n", e.CreationDate.Local(), e.UUID(), e.Tags)
+		dlog.Trace.Printf("Date: %s [%s] %s\n", e.CreationDate.Local(), e.UUID(), e.Tags)
 		const layout = "Mon, 02 Jan 2006"
 
 		p, err := j.PhotoStat(e.UUID())
@@ -165,7 +166,7 @@ func (myjournal *Myjournal) Parse(entry string, s string) (Journals, error) {
 	}
 
 	if err != nil {
-		Error.Panic(err)
+		dlog.Error.Panic(err)
 	}
 
 	sort.Sort(ByDate(journals))

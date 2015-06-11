@@ -3,6 +3,8 @@ package main
 import (
 	"net/http"
 	"time"
+
+	"github.com/rigingo/dlog"
 )
 
 func Logger(inner http.Handler, name string) http.Handler {
@@ -17,7 +19,7 @@ func Logger(inner http.Handler, name string) http.Handler {
 			client = r.RemoteAddr
 		}
 
-		Info.Printf(
+		dlog.Info.Printf(
 			"%s\t%s\t%s\t%s\t%s\t%s",
 			client,
 			time.Since(start),

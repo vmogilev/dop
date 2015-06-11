@@ -3,12 +3,12 @@ package main
 import (
 	"encoding/json"
 	"flag"
-	"io"
 	"io/ioutil"
-	"log"
 	"net/http"
 	"os"
 	"path/filepath"
+
+	"github.com/rigingo/dlog"
 )
 
 type Myjournal struct {
@@ -22,47 +22,17 @@ type Myjournal struct {
 
 var myjournal Myjournal
 
-var (
-	Trace   *log.Logger
-	Info    *log.Logger
-	Warning *log.Logger
-	Error   *log.Logger
-)
-
-func Init(
-	traceHandle io.Writer,
-	infoHandle io.Writer,
-	warningHandle io.Writer,
-	errorHandle io.Writer) {
-
-	Trace = log.New(traceHandle,
-		"TRACE: ",
-		log.Ldate|log.Ltime|log.Lshortfile)
-
-	Info = log.New(infoHandle,
-		"INFO: ",
-		log.Ldate|log.Ltime|log.Lshortfile)
-
-	Warning = log.New(warningHandle,
-		"WARNING: ",
-		log.Ldate|log.Ltime|log.Lshortfile)
-
-	Error = log.New(errorHandle,
-		"ERROR: ",
-		log.Ldate|log.Ltime|log.Lshortfile)
-}
-
 func Load(f string) {
 	jData, err := ioutil.ReadFile(filepath.Join(f, "conf", "dop.json"))
 	if err != nil {
-		Error.Fatalf("Unable to read the data file (%s): %s", f, err)
+		dlog.Error.Fatalf("Unable to read the data file (%s): %s", f, err)
 	}
 	if err := json.Unmarshal(jData, &myjournal); err != nil {
-		Error.Fatalf("Unable to Unmarshal DOP config from data file (%s): %s", jData, err)
+		dlog.Error.Fatalf("Unable to Unmarshal DOP config from data file (%s): %s", jData, err)
 	}
 	myjournal.TemplateDIR = filepath.Join(f, "templates")
 	compileTemplate(myjournal.TemplateDIR)
-	Info.Println(myjournal)
+	dlog.Info.Println(myjournal)
 
 }
 
@@ -83,9 +53,9 @@ func main() {
 	flag.Parse()
 
 	if debug {
-		Init(os.Stdout, os.Stdout, os.Stdout, os.Stderr)
+		dlog.Init(os.Stdout, os.Stdout, os.Stdout, os.Stderr)
 	} else {
-		Init(ioutil.Discard, os.Stdout, os.Stdout, os.Stderr)
+		dlog.Init(ioutil.Discard, os.Stdout, os.Stdout, os.Stderr)
 	}
 
 	Load(dopRoot)
@@ -106,13 +76,13 @@ func main() {
 	jd := filepath.Join(journal, "entries")
 	files, err := ioutil.ReadDir(jd)
 	if err != nil {
-		Error.Fatalf("ERROR: Journal directory is not readable: %s\n", jd)
+		dlog.Error.Fatalf("ERROR: Journal directory is not readable: %s\n", jd)
 	}
 
-	Info.Printf("Found %d journal entries in %s\n", len(files), journal)
+	dlog.Info.Printf("Found %d journal entries in %s\n", len(files), journal)
 
 	photos := filepath.Join(journal, "photos")
 	router := NewRouter(httpMount, dopRoot, photos)
 
-	Info.Fatal(http.ListenAndServe(":"+httpPort, router))
+	dlog.Info.Fatal(http.ListenAndServe(":"+httpPort, router))
 }

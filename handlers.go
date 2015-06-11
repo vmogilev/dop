@@ -6,13 +6,14 @@ import (
 	"strings"
 
 	"github.com/gorilla/mux"
+	"github.com/rigingo/dlog"
 )
 
 func NotFound(id string, w http.ResponseWriter) {
 	w.Header().Set("Content-Type", "application/json; charset=UTF-8")
 	w.WriteHeader(http.StatusNotFound)
 	if err := json.NewEncoder(w).Encode(jsonErr{Code: http.StatusNotFound, Text: "Not Found", Id: id}); err != nil {
-		Error.Panic(err)
+		dlog.Error.Panic(err)
 	}
 
 }
@@ -32,7 +33,7 @@ func (myjournal *Myjournal) List(w http.ResponseWriter, r *http.Request) {
 
 	b, err := json.MarshalIndent(journals, "", "    ")
 	if err != nil {
-		Error.Panicf("ERROR: encoding JSON: %s\n", err)
+		dlog.Error.Panicf("ERROR: encoding JSON: %s\n", err)
 	}
 	w.Header().Set("Content-Type", "application/json; charset=UTF-8")
 	w.WriteHeader(http.StatusOK)
