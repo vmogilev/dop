@@ -20,8 +20,8 @@ type Journal struct {
 	Tags      []string      `json:"tags"`
 	Date      time.Time     `json:"date"`
 	Photo     interface{}   `json:"photo"` // interface is needed here so we can assign "nil" to entry that has no photo
-	Thumb     interface{}   `json:"photo"` // interface is needed here so we can assign "nil" to entry that has no photo
-	Small     interface{}   `json:"photo"` // interface is needed here so we can assign "nil" to entry that has no photo
+	Thumb     interface{}   `json:"thumb"` // interface is needed here so we can assign "nil" to entry that has no photo
+	Small     interface{}   `json:"small"` // interface is needed here so we can assign "nil" to entry that has no photo
 	Count     int           `json:"count"`
 	EntryText string        `json:"entrytext,omitempty"`
 	EntryMD   template.HTML `json:"-"`
