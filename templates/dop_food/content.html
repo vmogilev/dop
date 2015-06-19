@@ -20,7 +20,7 @@
                   <tbody>
               {{range .Navbar}}
                     <tr>
-                      <td><a href="{{$.HttpFQDN}}/e/{{.Id}}">{{.Title}}</a></td>
+                      <td><a href="{{$.HttpFQDN}}/e/{{.DopLink}}">{{.Title}}</a></td>
                       <td>{{if .Photo}}<img src="{{$.HttpFQDN}}/photos/{{.Thumb}}" alt="Photo">{{end}}</td>
                   {{if .Starred}}
                       <td><span class="label label-success">YES!</span></td>

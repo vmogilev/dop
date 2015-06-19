@@ -14,6 +14,9 @@ import (
 type Myjournal struct {
 	Dir         string
 	Title       string
+	Desc        string
+	Template    string
+	PubStarred  bool
 	Count       string
 	CssLookup   map[string]string
 	HttpFQDN    string
@@ -30,7 +33,7 @@ func Load(f string) {
 	if err := json.Unmarshal(jData, &myjournal); err != nil {
 		dlog.Error.Fatalf("Unable to Unmarshal DOP config from data file (%s): %s", jData, err)
 	}
-	myjournal.TemplateDIR = filepath.Join(f, "templates")
+	myjournal.TemplateDIR = filepath.Join(f, "templates", myjournal.Template)
 	compileTemplate(myjournal.TemplateDIR)
 	dlog.Info.Println(myjournal)
 

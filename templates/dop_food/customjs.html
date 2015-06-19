@@ -1,0 +1,48 @@
+{{ define "customjs" }}
+    {{if .PrevId}}
+        <script type="text/javascript">
+        $(document).ready(function()
+        {
+            $("body").keydown(function(e) {
+                if(e.target.nodeName.toLowerCase() == 'input'){
+                    return;
+                }
+                if(e.keyCode == 37) { // left
+                    window.location = '{{$.HttpFQDN}}/e/{{.PrevId}}'
+                }
+            });
+        });
+        </script>
+    {{end}}
+    {{if .NextId}}
+        <script type="text/javascript">
+        $(document).ready(function()
+        {
+            $("body").keydown(function(e) {
+                if(e.target.nodeName.toLowerCase() == 'input'){
+                    return;
+                }
+
+                if(e.keyCode == 39) { // right
+                    window.location = '{{$.HttpFQDN}}/e/{{.NextId}}'
+                }
+            });
+        });
+        </script>
+    {{end}}
+    <script type="text/javascript">
+    $('#navsearch').submit(function(e){
+        e.preventDefault();
+        window.location = '{{.HttpFQDN}}/s/'+$(this).serialize();
+    });
+
+    $(document).ready(function()
+    {
+        $("body").keyup(function(e) {
+            if (e.keyCode == 27) { // esc
+                window.location = '{{$.HttpFQDN}}/'
+            }
+        });
+    });
+    </script>
+{{ end }}

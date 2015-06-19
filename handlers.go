@@ -23,9 +23,10 @@ func (myjournal *Myjournal) List(w http.ResponseWriter, r *http.Request) {
 	var err error
 	var entry string
 	var journals Journals
+	//var jindex JIndex
 
 	entry = vars["entryId"]
-	journals, err = myjournal.Parse(entry, "")
+	journals, _, err = myjournal.Parse(entry, "")
 	if (err != nil) && (err.Error() == "NotFound") {
 		NotFound(entry, w)
 		return
@@ -45,16 +46,20 @@ func (mj *Myjournal) Index(w http.ResponseWriter, r *http.Request) {
 	var err error
 	var entry string
 	var journals Journals
+	var jindex JIndex
 	var current Journals
 	var list bool
 	var search string
+	var desc string
 
 	search = strings.Replace(vars["term"], "+", " ", -1)
-	journals, err = myjournal.Parse("*", search)
+	journals, jindex, err = myjournal.Parse("*", search)
 
 	entry = vars["entryId"]
+	dlog.Trace.Printf("entry_POST=%s", entry)
 	if entry == "" {
 		list = true
+		desc = mj.Desc
 		if len(journals) > 0 {
 			entry = journals[0].Id
 		} else {
@@ -62,12 +67,22 @@ func (mj *Myjournal) Index(w http.ResponseWriter, r *http.Request) {
 		}
 	} else {
 		list = false
+		entry = jindex[entry]
 	}
 
-	current, err = myjournal.Parse(entry, "")
+	dlog.Trace.Printf("entry_PARSE=%s", entry)
+	dlog.Trace.Printf("len(jindex)=%s", len(jindex))
+
+	current, _, err = myjournal.Parse(entry, "")
 	if (err != nil) && (err.Error() == "NotFound") {
 		NotFound(entry, w)
 		return
+	}
+
+	if desc == "" {
+		if desc = current[0].DopDesc; desc == "" {
+			desc = mj.Desc
+		}
 	}
 
 	var nextid string
@@ -79,6 +94,7 @@ func (mj *Myjournal) Index(w http.ResponseWriter, r *http.Request) {
 
 	page := Page{
 		Title:     mj.Title,
+		Desc:      desc,
 		IsList:    list,
 		PrevId:    previd,
 		NextId:    nextid,

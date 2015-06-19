@@ -1,11 +1,13 @@
 {
-    "Dir": "/Users/mve/journals/FJrnl2015.dayone",
-    "Title": "Food Journal",
-    "Count": "Bathroom:",
+    "Dir": "/Users/mve/journals/GoLANGBlog.dayone",
+    "Title": "GOLANG Blog",
+    "Desc": "Blog about GOLANG",
+    "Template": "dop_blog",
+    "PubStarred": true,
+    "Count": "GOLANG",
     "CssLookup": {
-        "IN_experiment": "warning",
-        "Tarlov": "danger",
-        "horrible": "danger",
-        "amazing": "success"
+        "git": "success",
+        "nginx": "warning",
+        "ci": "danger"
     }
 }

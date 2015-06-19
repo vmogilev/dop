@@ -20,6 +20,7 @@ func compileTemplate(p string) {
 
 type Page struct {
 	Title     string
+	Desc      string
 	IsList    bool
 	PrevId    string
 	NextId    string
