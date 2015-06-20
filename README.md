@@ -35,15 +35,13 @@ Example:
 ## Configuration
 
 Modify conf/dop.json and define the following variables:
-* `Dir`: path to your DayOne journal directory where `entries` subdirectory is located (do not add trailing slash)
 * `Title`: Site's Top Level Title
 * `Desc`: Site's description - maps to `<meta name="description" content="">` on top level page/root
-* `Template`: subdirectory name in `templates` dir containing DOP's templates (currently two templates exist: `dop_blog` and `dop_food`)
 * `PubStarred`: `true|false` - if `true` only Starred entries are published
 * `Count`: Only used with `dop_food` template - counts occurances of string and sets result in a badge
 * `CssLookup`: map of `tag` -> `css-tag` - allowed values [`success` `warning` `danger`]
 
-Modify conf/dop.env and define HTTP Host variables (see example configuration)
+Modify conf/dop.env and define HTTP Host variables and JDIR - path to your DayOne journal directory where `entries` subdirectory is located (see example configuration)
 
 ## Startup
 
@@ -63,5 +61,5 @@ Start it:
 
 Apache License Version 2.0
 
-*rev:   201 *
+*rev:   202 *
 
