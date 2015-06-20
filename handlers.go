@@ -130,6 +130,7 @@ func (jc *JournalConf) Index(w http.ResponseWriter, r *http.Request) {
 	}
 
 	page := Page{
+		SiteTitle: jv.Title,
 		Title:     title,
 		Desc:      desc,
 		IsList:    list,

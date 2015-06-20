@@ -19,6 +19,7 @@ func compileTemplate(p string) {
 }
 
 type Page struct {
+	SiteTitle string
 	Title     string
 	Desc      string
 	IsList    bool
