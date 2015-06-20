@@ -20,7 +20,7 @@ fi
 if [ -d "$JDIR/entries" ]; then
     echo "OK: found entries in $JDIR/entries"
 else
-    err "dop conf file is missing in $DOPROOT/conf/dop.json"
+    err "Day One Journal entries are in $JDIR/entries"
 fi
 
 
