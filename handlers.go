@@ -77,7 +77,7 @@ func (jc *JournalConf) Index(w http.ResponseWriter, r *http.Request) {
 	var current Journals
 	var list bool
 	var search string
-	var desc string
+	var title, desc string
 
 	var jv JournalVars
 	jv = Load(jc.DopRoot)
@@ -90,6 +90,7 @@ func (jc *JournalConf) Index(w http.ResponseWriter, r *http.Request) {
 	if entry == "" {
 		list = true
 		desc = jv.Desc
+		title = jv.Title
 		if len(journals) > 0 {
 			entry = journals[0].Id
 		} else {
@@ -115,6 +116,12 @@ func (jc *JournalConf) Index(w http.ResponseWriter, r *http.Request) {
 		}
 	}
 
+	if title == "" {
+		if title = current[0].Title; title == "" {
+			title = jv.Title
+		}
+	}
+
 	var nextid string
 	var previd string
 	if currpos := journals.CurrPosition(entry); currpos != -1 {
@@ -123,7 +130,7 @@ func (jc *JournalConf) Index(w http.ResponseWriter, r *http.Request) {
 	}
 
 	page := Page{
-		Title:     jv.Title,
+		Title:     title,
 		Desc:      desc,
 		IsList:    list,
 		PrevId:    previd,
