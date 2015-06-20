@@ -17,8 +17,16 @@ else
     err "dop conf file is missing in $DOPROOT/conf/dop.json"
 fi
 
+if [ -d "$JDIR/entries" ]; then
+    echo "OK: found entries in $JDIR/entries"
+else
+    err "dop conf file is missing in $DOPROOT/conf/dop.json"
+fi
+
 
 nohup $GOPATH/bin/dop \
+    -jDir="${JDIR}" \
+    -jTemplate="${JTEMPLATE}" \
     -dopRoot="${DOPROOT}" \
     -httpHost="${HTTPHOST}" \
     -httpMount="${HTTPMOUNT}" \
