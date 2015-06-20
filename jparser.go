@@ -85,22 +85,23 @@ type DopTokens struct {
 	Link  string
 }
 
-func ParseToken(s, t string) string {
+func ParseToken(s, t string) (bool, string) {
 	rp := regexp.MustCompile(t)
 
 	if rp.MatchString(s) {
 		dlog.Trace.Printf("t=%s | s=%s", t, s)
-		return s[len(t)-1:]
+		return true, s[len(t)-1:]
 	}
-	return ""
+	return false, ""
 }
 
 // GetTokens gets values for three dop tokens from lines 1,2,3
 // line 1: Title	- should start with "# "
 // line 2: Description	- should start with "//dop:desc "
 // line 3: Link		- should start with "//dop:link "
-func GetTokens(s string) DopTokens {
+func GetTokens(s string) (DopTokens, string) {
 	var r DopTokens
+	var rejoin, ok bool
 	r = DopTokens{}
 	t := "^# "
 	d := "^//dop:desc "
@@ -112,11 +113,36 @@ func GetTokens(s string) DopTokens {
 		dlog.Trace.Printf("lines[0]=%s", lines[0])
 		dlog.Trace.Printf("lines[1]=%s", lines[1])
 		dlog.Trace.Printf("lines[2]=%s", lines[2])
-		r.Title = ParseToken(lines[0], t)
-		r.Desc = ParseToken(lines[1], d)
-		r.Link = ParseToken(lines[2], l)
+		if ok, r.Title = ParseToken(lines[0], t); ok {
+			lines[0] = "del"
+			rejoin = true
+		}
+		if ok, r.Desc = ParseToken(lines[1], d); ok {
+			lines[1] = "del"
+			rejoin = true
+		}
+		if ok, r.Link = ParseToken(lines[2], l); ok {
+			lines[2] = "del"
+			rejoin = true
+		}
 	}
-	return r
+
+	if rejoin {
+		// now zap through the first 3 elements and
+		// slice/delete those marked for deletion
+		mx := len(lines)
+		dlog.Trace.Println("mx=", mx)
+		for i := 1; i < 4 && i < mx; i++ {
+			dlog.Trace.Println("BEFORE: lines[0]=", lines[0])
+			if lines[0] == "del" {
+				lines = append(lines[:0], lines[1:]...)
+			}
+			dlog.Trace.Println("AFTER: lines[0]=", lines[0])
+		}
+
+		return r, strings.Join(lines, "\n")
+	}
+	return r, s
 }
 
 func Parse(entry string, search string, jc *JournalConf, jv *JournalVars) (Journals, JIndex, error) {
@@ -161,9 +187,9 @@ func Parse(entry string, search string, jc *JournalConf, jv *JournalVars) (Journ
 
 		if gettext {
 			etext = e.EntryText
+			tokens, etext = GetTokens(etext)
 			md = template.HTML(blackfriday.MarkdownCommon([]byte(etext)))
 			cnt = strings.Count(etext, jv.Count)
-			tokens = GetTokens(etext)
 			if buildIndex {
 				if tokens.Link != "" {
 					jindex[tokens.Link] = uuid
