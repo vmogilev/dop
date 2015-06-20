@@ -5,6 +5,7 @@ import (
 	"path/filepath"
 
 	"github.com/gorilla/mux"
+	"github.com/rigingo/dlog"
 )
 
 func MountPoint(httpMount string) string {
@@ -21,6 +22,10 @@ func NewRouter(httpMount string, dopRoot string, photos string) *mux.Router {
 
 	router := mux.NewRouter().StrictSlash(true)
 	//router.PathPrefix(httpMount)
+
+	var routes Routes
+	routes = jc.Mount()
+	dlog.Info.Println(routes)
 
 	for _, route := range routes {
 		var handler http.Handler

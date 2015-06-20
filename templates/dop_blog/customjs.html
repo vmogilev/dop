@@ -8,7 +8,7 @@
                     return;
                 }
                 if(e.keyCode == 37) { // left
-                    window.location = '{{$.HttpFQDN}}/e/{{.PrevId}}'
+                    window.location = '{{$.HttpFQDN}}/{{$.EUrl}}/{{.PrevId}}'
                 }
             });
         });
@@ -24,7 +24,7 @@
                 }
 
                 if(e.keyCode == 39) { // right
-                    window.location = '{{$.HttpFQDN}}/e/{{.NextId}}'
+                    window.location = '{{$.HttpFQDN}}/{{$.EUrl}}/{{.NextId}}'
                 }
             });
         });

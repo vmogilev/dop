@@ -1,7 +1,6 @@
 package main
 
 import (
-	"encoding/json"
 	"flag"
 	"io/ioutil"
 	"net/http"
@@ -11,33 +10,16 @@ import (
 	"github.com/rigingo/dlog"
 )
 
-type Myjournal struct {
-	Dir         string
-	Title       string
-	Desc        string
-	Template    string
-	PubStarred  bool
-	Count       string
-	CssLookup   map[string]string
-	HttpFQDN    string
-	TemplateDIR string
+type JournalConf struct {
+	JDir     string
+	Template string
+	HttpFQDN string
+	DopRoot  string
+	EUrl     string
+	TUrl     string
 }
 
-var myjournal Myjournal
-
-func Load(f string) {
-	jData, err := ioutil.ReadFile(filepath.Join(f, "conf", "dop.json"))
-	if err != nil {
-		dlog.Error.Fatalf("Unable to read the data file (%s): %s", f, err)
-	}
-	if err := json.Unmarshal(jData, &myjournal); err != nil {
-		dlog.Error.Fatalf("Unable to Unmarshal DOP config from data file (%s): %s", jData, err)
-	}
-	myjournal.TemplateDIR = filepath.Join(f, "templates", myjournal.Template)
-	compileTemplate(myjournal.TemplateDIR)
-	dlog.Info.Println(myjournal)
-
-}
+var jc JournalConf
 
 func main() {
 	var dopRoot string
@@ -45,13 +27,22 @@ func main() {
 	var httpPort string
 	var httpMount string
 	var httpHostExt string
+	var jTemplate string
+	var jDir string
 	var debug bool
+	var fqdn string
+	var eURL string
+	var tURL string
 
 	flag.StringVar(&dopRoot, "dopRoot", "./", "DOP Root Directory [where the ./conf, ./static and ./templates dirs are]")
 	flag.StringVar(&httpHost, "httpHost", "http://localhost", "HTTP Host Name")
 	flag.StringVar(&httpPort, "httpPort", "8080", "HTTP Port")
 	flag.StringVar(&httpMount, "httpMount", "/", "HTTP Mount Point [EX: /myjournal]")
 	flag.StringVar(&httpHostExt, "httpHostExt", "", "Fully Qualified External Path if using Proxy [EX: http://mydomain.com/path]")
+	flag.StringVar(&jTemplate, "jTemplate", "dop_blog", "Tempate Directory Name in ./templates/")
+	flag.StringVar(&jDir, "jDir", "", "Path to Day One Journal Directory where entries subdirectory is located")
+	flag.StringVar(&eURL, "eURL", "e", "Entry URL Path: http://{httpHost}/{httpMount}/{eURL}")
+	flag.StringVar(&tURL, "tURL", "tag", "Tag URL Path: http://{httpHost}/{httpMount}/{tURL}")
 	flag.BoolVar(&debug, "debug", false, "Debug")
 	flag.Parse()
 
@@ -61,30 +52,41 @@ func main() {
 		dlog.Init(ioutil.Discard, os.Stdout, os.Stdout, os.Stderr)
 	}
 
-	Load(dopRoot)
 	mp := MountPoint(httpMount)
-
 	if httpHostExt != "" {
-		myjournal.HttpFQDN = httpHostExt
+		fqdn = httpHostExt
 	} else {
 		if httpPort == "80" {
-			myjournal.HttpFQDN = httpHost + mp
+			fqdn = httpHost + mp
 		} else {
-			myjournal.HttpFQDN = httpHost + ":" + httpPort + mp
+			fqdn = httpHost + ":" + httpPort + mp
 		}
 	}
 
-	var journal string
-	journal = myjournal.Dir
-	jd := filepath.Join(journal, "entries")
+	tdir := filepath.Join(dopRoot, "templates", jTemplate)
+	compileTemplate(tdir)
+
+	jd := filepath.Join(jDir, "entries")
 	files, err := ioutil.ReadDir(jd)
 	if err != nil {
 		dlog.Error.Fatalf("ERROR: Journal directory is not readable: %s\n", jd)
 	}
 
-	dlog.Info.Printf("Found %d journal entries in %s\n", len(files), journal)
+	dlog.Info.Printf("Found %d journal entries in %s\n", len(files), jDir)
 
-	photos := filepath.Join(journal, "photos")
+	jc = JournalConf{
+		JDir:     jDir,
+		Template: jTemplate,
+		HttpFQDN: fqdn,
+		DopRoot:  dopRoot,
+		EUrl:     eURL,
+		TUrl:     tURL,
+	}
+
+	jv := Load(jc.DopRoot)
+	dlog.Info.Println(jv)
+
+	photos := filepath.Join(jDir, "photos")
 	router := NewRouter(httpMount, dopRoot, photos)
 
 	dlog.Info.Fatal(http.ListenAndServe(":"+httpPort, router))

@@ -11,41 +11,45 @@ type Route struct {
 
 type Routes []Route
 
-var routes = Routes{
-	Route{
-		"Index",
-		"GET",
-		"/",
-		myjournal.Index,
-	},
-	Route{
-		"SearchEmpty",
-		"GET",
-		"/s/term=",
-		myjournal.Index,
-	},
-	Route{
-		"Search",
-		"GET",
-		"/s/term={term}",
-		myjournal.Index,
-	},
-	Route{
-		"Entry",
-		"GET",
-		"/e/{entryId}",
-		myjournal.Index,
-	},
-	Route{
-		"EntryList",
-		"GET",
-		"/list",
-		myjournal.List,
-	},
-	Route{
-		"EntryShow",
-		"GET",
-		"/entry/{entryId}",
-		myjournal.List,
-	},
+func (jc *JournalConf) Mount() Routes {
+	var routes Routes
+	routes = Routes{
+		Route{
+			"Index",
+			"GET",
+			"/",
+			jc.Index,
+		},
+		Route{
+			"SearchEmpty",
+			"GET",
+			"/s/term=",
+			jc.Index,
+		},
+		Route{
+			"Search",
+			"GET",
+			"/s/term={term}",
+			jc.Index,
+		},
+		Route{
+			"Entry",
+			"GET",
+			"/" + jc.EUrl + "/{entryId}",
+			jc.Index,
+		},
+		Route{
+			"EntryList",
+			"GET",
+			"/api",
+			jc.JsonAPI,
+		},
+		Route{
+			"EntryShow",
+			"GET",
+			"/api/e/{entryId}",
+			jc.JsonAPI,
+		},
+	}
+	return routes
 }

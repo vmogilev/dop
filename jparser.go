@@ -119,13 +119,13 @@ func GetTokens(s string) DopTokens {
 	return r
 }
 
-func (myjournal *Myjournal) Parse(entry string, s string) (Journals, JIndex, error) {
+func Parse(entry string, search string, jc *JournalConf, jv *JournalVars) (Journals, JIndex, error) {
 	var err error
 	var journals Journals
 	var jindex JIndex
 	jindex = JIndex{}
 
-	j := dayone.NewJournal(myjournal.Dir)
+	j := dayone.NewJournal(jc.JDir)
 
 	parse := func(e *dayone.Entry, err error, gettext bool, search string, buildIndex bool) error {
 		var photo interface{}
@@ -150,13 +150,9 @@ func (myjournal *Myjournal) Parse(entry string, s string) (Journals, JIndex, err
 
 		p, err := j.PhotoStat(uuid)
 		if (err == nil) && (p != nil) {
-			//photo = filepath.Join(journal, "photos", p.Name())
-			//photo = filepath.Join("photos", p.Name())
 			photo = p.Name()
-			//thumb = MakeThumbnail(filepath.Join(myjournal.Dir, "photos"), photo.(string), 28, 28)
-			//small = MakeThumbnail(filepath.Join(myjournal.Dir, "photos"), photo.(string), 640, 0)
-			thumb = MakeThumbnailVIPS(filepath.Join(myjournal.Dir, "photos"), photo.(string), 28, 28)
-			small = MakeThumbnailVIPS(filepath.Join(myjournal.Dir, "photos"), photo.(string), 640, 0)
+			thumb = MakeThumbnailVIPS(filepath.Join(jc.JDir, "photos"), photo.(string), 28, 28)
+			small = MakeThumbnailVIPS(filepath.Join(jc.JDir, "photos"), photo.(string), 640, 0)
 		} else {
 			photo = nil
 			thumb = nil
@@ -166,7 +162,7 @@ func (myjournal *Myjournal) Parse(entry string, s string) (Journals, JIndex, err
 		if gettext {
 			etext = e.EntryText
 			md = template.HTML(blackfriday.MarkdownCommon([]byte(etext)))
-			cnt = strings.Count(etext, myjournal.Count)
+			cnt = strings.Count(etext, jv.Count)
 			tokens = GetTokens(etext)
 			if buildIndex {
 				if tokens.Link != "" {
@@ -216,7 +212,7 @@ func (myjournal *Myjournal) Parse(entry string, s string) (Journals, JIndex, err
 		dlog.Trace.Printf("2: tokens.Link=%s", tokens.Link)
 
 		pub = true
-		if myjournal.PubStarred {
+		if jv.PubStarred {
 			pub = false
 			if e.Starred {
 				pub = true
@@ -267,7 +263,7 @@ func (myjournal *Myjournal) Parse(entry string, s string) (Journals, JIndex, err
 		}
 		// closure to wrap the extra param
 		err = j.Read(func(e *dayone.Entry, err error) error {
-			return parse(e, err, parseall, s, buildIndex)
+			return parse(e, err, parseall, search, buildIndex)
 			//return err
 
 		})

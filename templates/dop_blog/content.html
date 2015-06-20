@@ -12,7 +12,7 @@
                   <tbody>
               {{range .Navbar}}
                     <tr>
-                      <td><a href="{{$.HttpFQDN}}/e/{{.DopLink}}">{{.Title}}</a></td>
+                      <td><a href="{{$.HttpFQDN}}/{{$.EUrl}}/{{.DopLink}}">{{.Title}}</a></td>
                       <td>{{if .Photo}}<img src="{{$.HttpFQDN}}/photos/{{.Thumb}}" alt="Photo">{{end}}</td>
                       <td>
                       {{range .Tags}}
@@ -30,8 +30,8 @@
             <div class="pn-controls">
             <nav>
               <ul class="pager">
-                <li{{if $.PrevId}}{{else}} class="disabled"{{end}}><a href="{{if $.PrevId}}{{$.HttpFQDN}}/e/{{$.PrevId}}{{else}}#{{end}}"><span aria-hidden="true">&larr;</span></a></li>
-                <li{{if $.NextId}}{{else}} class="disabled"{{end}}><a href="{{if $.NextId}}{{$.HttpFQDN}}/e/{{$.NextId}}{{else}}#{{end}}"><span aria-hidden="true">&rarr;</span></a></li>
+                <li{{if $.PrevId}}{{else}} class="disabled"{{end}}><a href="{{if $.PrevId}}{{$.HttpFQDN}}/{{$.EUrl}}/{{$.PrevId}}{{else}}#{{end}}"><span aria-hidden="true">&larr;</span></a></li>
+                <li{{if $.NextId}}{{else}} class="disabled"{{end}}><a href="{{if $.NextId}}{{$.HttpFQDN}}/{{$.EUrl}}/{{$.NextId}}{{else}}#{{end}}"><span aria-hidden="true">&rarr;</span></a></li>
               </ul>
             </nav>
             </div>
@@ -41,8 +41,8 @@
             <div class="pn-controls">
             <nav>
               <ul class="pager">
-                <li{{if $.PrevId}}{{else}} class="disabled"{{end}}><a href="{{if $.PrevId}}{{$.HttpFQDN}}/e/{{$.PrevId}}{{else}}#{{end}}"><span aria-hidden="true">&larr;</span></a></li>
-                <li{{if $.NextId}}{{else}} class="disabled"{{end}}><a href="{{if $.NextId}}{{$.HttpFQDN}}/e/{{$.NextId}}{{else}}#{{end}}"><span aria-hidden="true">&rarr;</span></a></li>
+                <li{{if $.PrevId}}{{else}} class="disabled"{{end}}><a href="{{if $.PrevId}}{{$.HttpFQDN}}/{{$.EUrl}}/{{$.PrevId}}{{else}}#{{end}}"><span aria-hidden="true">&larr;</span></a></li>
+                <li{{if $.NextId}}{{else}} class="disabled"{{end}}><a href="{{if $.NextId}}{{$.HttpFQDN}}/{{$.EUrl}}/{{$.NextId}}{{else}}#{{end}}"><span aria-hidden="true">&rarr;</span></a></li>
               </ul>
             </nav>
             </div>

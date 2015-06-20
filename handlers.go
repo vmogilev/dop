@@ -2,12 +2,36 @@ package main
 
 import (
 	"encoding/json"
+	"io/ioutil"
 	"net/http"
+	"path/filepath"
 	"strings"
 
 	"github.com/gorilla/mux"
 	"github.com/rigingo/dlog"
 )
+
+type JournalVars struct {
+	Title      string
+	Desc       string
+	PubStarred bool
+	Count      string
+	CssLookup  map[string]string
+}
+
+func Load(f string) JournalVars {
+	jv := JournalVars{}
+
+	jf, err := ioutil.ReadFile(filepath.Join(f, "conf", "dop.json"))
+	if err != nil {
+		dlog.Error.Fatalf("Unable to read the data file (%s): %s", f, err)
+	}
+	if err := json.Unmarshal(jf, &jv); err != nil {
+		dlog.Error.Fatalf("Unable to Unmarshal DOP config from data file (%s): %s", jf, err)
+	}
+	dlog.Trace.Println(jv)
+	return jv
+}
 
 func NotFound(id string, w http.ResponseWriter) {
 	w.Header().Set("Content-Type", "application/json; charset=UTF-8")
@@ -18,15 +42,18 @@ func NotFound(id string, w http.ResponseWriter) {
 
 }
 
-func (myjournal *Myjournal) List(w http.ResponseWriter, r *http.Request) {
+func (jc *JournalConf) JsonAPI(w http.ResponseWriter, r *http.Request) {
 	vars := mux.Vars(r)
 	var err error
 	var entry string
 	var journals Journals
 	//var jindex JIndex
 
+	var jv JournalVars
+	jv = Load(jc.DopRoot)
+
 	entry = vars["entryId"]
-	journals, _, err = myjournal.Parse(entry, "")
+	journals, _, err = Parse(entry, "", jc, &jv)
 	if (err != nil) && (err.Error() == "NotFound") {
 		NotFound(entry, w)
 		return
@@ -41,7 +68,7 @@ func (myjournal *Myjournal) List(w http.ResponseWriter, r *http.Request) {
 	w.Write(b)
 }
 
-func (mj *Myjournal) Index(w http.ResponseWriter, r *http.Request) {
+func (jc *JournalConf) Index(w http.ResponseWriter, r *http.Request) {
 	vars := mux.Vars(r)
 	var err error
 	var entry string
@@ -52,14 +79,17 @@ func (mj *Myjournal) Index(w http.ResponseWriter, r *http.Request) {
 	var search string
 	var desc string
 
+	var jv JournalVars
+	jv = Load(jc.DopRoot)
+
 	search = strings.Replace(vars["term"], "+", " ", -1)
-	journals, jindex, err = myjournal.Parse("*", search)
+	journals, jindex, err = Parse("*", search, jc, &jv)
 
 	entry = vars["entryId"]
 	dlog.Trace.Printf("entry_POST=%s", entry)
 	if entry == "" {
 		list = true
-		desc = mj.Desc
+		desc = jv.Desc
 		if len(journals) > 0 {
 			entry = journals[0].Id
 		} else {
@@ -73,7 +103,7 @@ func (mj *Myjournal) Index(w http.ResponseWriter, r *http.Request) {
 	dlog.Trace.Printf("entry_PARSE=%s", entry)
 	dlog.Trace.Printf("len(jindex)=%s", len(jindex))
 
-	current, _, err = myjournal.Parse(entry, "")
+	current, _, err = Parse(entry, "", jc, &jv)
 	if (err != nil) && (err.Error() == "NotFound") {
 		NotFound(entry, w)
 		return
@@ -81,7 +111,7 @@ func (mj *Myjournal) Index(w http.ResponseWriter, r *http.Request) {
 
 	if desc == "" {
 		if desc = current[0].DopDesc; desc == "" {
-			desc = mj.Desc
+			desc = jv.Desc
 		}
 	}
 
@@ -93,14 +123,16 @@ func (mj *Myjournal) Index(w http.ResponseWriter, r *http.Request) {
 	}
 
 	page := Page{
-		Title:     mj.Title,
+		Title:     jv.Title,
 		Desc:      desc,
 		IsList:    list,
 		PrevId:    previd,
 		NextId:    nextid,
-		HttpFQDN:  mj.HttpFQDN,
+		HttpFQDN:  jc.HttpFQDN,
+		EUrl:      jc.EUrl,
+		TUrl:      jc.TUrl,
 		Search:    search,
-		CssLookup: mj.CssLookup,
+		CssLookup: jv.CssLookup,
 		Navbar:    journals,
 		Content:   current,
 	}
