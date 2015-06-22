@@ -98,7 +98,11 @@ func (jc *JournalConf) Index(w http.ResponseWriter, r *http.Request) {
 		}
 	} else {
 		list = false
-		entry = jindex[entry]
+		entry = jindex[strings.ToLower(entry)]
+		if entry == "" {
+			NotFound(entry, w)
+			return
+		}
 	}
 
 	dlog.Trace.Printf("entry_PARSE=%s", entry)

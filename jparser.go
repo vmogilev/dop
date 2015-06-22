@@ -87,9 +87,10 @@ type DopTokens struct {
 
 func ParseToken(s, t string) (bool, string) {
 	rp := regexp.MustCompile(t)
+	dlog.Trace.Printf("t=%s | s=%s", t, s)
 
 	if rp.MatchString(s) {
-		dlog.Trace.Printf("t=%s | s=%s", t, s)
+		dlog.Trace.Println("matched")
 		return true, s[len(t)-1:]
 	}
 	return false, ""
@@ -97,37 +98,39 @@ func ParseToken(s, t string) (bool, string) {
 
 // GetTokens gets values for three dop tokens from lines 1,2,3
 // line 1: Title	- should start with "# "
-// line 2: Description	- should start with "//dop:desc "
-// line 3: Link		- should start with "//dop:link "
+// line 2: Description	- should start with "//dd: "
+// line 3: Link		- should start with "//dl: "
 func GetTokens(s string) (DopTokens, string) {
-	var r DopTokens
-	var rejoin, ok bool
-	r = DopTokens{}
-	t := "^# "
-	d := "^//dop:desc "
-	l := "^//dop:link "
+	var found bool
+	var line string
+
+	r := DopTokens{}
+	tmap := map[int]string{
+		0: "^# ",
+		1: "^//dd: ",
+		2: "^//dl: ",
+	}
 
 	lines := strings.Split(s, "\n")
 
 	if len(lines) >= 3 {
-		dlog.Trace.Printf("lines[0]=%s", lines[0])
-		dlog.Trace.Printf("lines[1]=%s", lines[1])
-		dlog.Trace.Printf("lines[2]=%s", lines[2])
-		if ok, r.Title = ParseToken(lines[0], t); ok {
-			lines[0] = "del"
-			rejoin = true
-		}
-		if ok, r.Desc = ParseToken(lines[1], d); ok {
-			lines[1] = "del"
-			rejoin = true
-		}
-		if ok, r.Link = ParseToken(lines[2], l); ok {
-			lines[2] = "del"
-			rejoin = true
+		for k, v := range tmap {
+			dlog.Trace.Printf("lines[%d]=%s", k, lines[k])
+			if found, line = ParseToken(lines[k], v); found {
+				lines[k] = "del"
+				switch {
+				case k == 0:
+					r.Title = line
+				case k == 1:
+					r.Desc = line
+				case k == 2:
+					r.Link = strings.ToLower(line)
+				}
+			}
 		}
 	}
 
-	if rejoin {
+	if found {
 		// now zap through the first 3 elements and
 		// slice/delete those marked for deletion
 		mx := len(lines)
@@ -143,6 +146,14 @@ func GetTokens(s string) (DopTokens, string) {
 		return r, strings.Join(lines, "\n")
 	}
 	return r, s
+}
+
+// snvl is a Classic SQL style NVL function
+func snvl(s1, s2 string) string {
+	if s1 == "" {
+		return s2
+	}
+	return s1
 }
 
 func Parse(entry string, search string, jc *JournalConf, jv *JournalVars) (Journals, JIndex, error) {
@@ -161,10 +172,10 @@ func Parse(entry string, search string, jc *JournalConf, jv *JournalVars) (Journ
 		var md template.HTML
 		var cnt int
 		var serp bool
-		var tokens DopTokens
 		var uuid string
 		var pub bool
 
+		var tokens DopTokens
 		uuid = e.UUID()
 
 		if err != nil {
@@ -202,11 +213,10 @@ func Parse(entry string, search string, jc *JournalConf, jv *JournalVars) (Journ
 			md = template.HTML("")
 			cnt = 0
 			tokens = DopTokens{}
+
 		}
 
-		dlog.Trace.Printf("1: tokens.Title=%s", tokens.Title)
-		dlog.Trace.Printf("1: tokens.Desc=%s", tokens.Desc)
-		dlog.Trace.Printf("1: tokens.Link=%s", tokens.Link)
+		dlog.Trace.Println("1: tokens=", tokens)
 
 		if (search != "") && (gettext) {
 			serp = GrepI(etext, search)
@@ -216,26 +226,12 @@ func Parse(entry string, search string, jc *JournalConf, jv *JournalVars) (Journ
 
 		var title string
 		charDate := e.CreationDate.Local().Format(layout)
+		title = snvl(tokens.Title, charDate)
+		tokens.Title = snvl(tokens.Title, title)
+		tokens.Desc = snvl(tokens.Desc, title)
+		tokens.Link = snvl(tokens.Link, uuid)
 
-		if tokens.Title != "" {
-			title = tokens.Title
-		} else {
-			title = charDate
-		}
-
-		if tokens.Title == "" {
-			tokens.Title = title
-		}
-		if tokens.Desc == "" {
-			tokens.Desc = title
-		}
-		if tokens.Link == "" {
-			tokens.Link = uuid
-		}
-
-		dlog.Trace.Printf("2: tokens.Title=%s", tokens.Title)
-		dlog.Trace.Printf("2: tokens.Desc=%s", tokens.Desc)
-		dlog.Trace.Printf("2: tokens.Link=%s", tokens.Link)
+		dlog.Trace.Println("2: tokens=", tokens)
 
 		pub = true
 		if jv.PubStarred {

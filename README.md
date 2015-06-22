@@ -15,8 +15,8 @@ DOP also supports custom Title, URL and Description for each entry as follows:
 Example:
 
     # Custom Entry Title
-    //dop:desc Longer Description of the entry
-    //dop:link my-entry-url.html
+    //dd: Longer Description of the entry
+    //dl: my-entry-url.html
 
 
 
@@ -61,5 +61,5 @@ Start it:
 
 Apache License Version 2.0
 
-*rev:   202 *
+*rev:   203 *
 
