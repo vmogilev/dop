@@ -2,15 +2,15 @@
 
 I built [Day One](http://dayoneapp.com/) Parser to host my Food Log online and to share it with my nutritionist.  However it can be also used to run a blog powered by Day One Journal.  Here is what it does:
 
-* displays Day One Tags as a list of color coded slugs (tag colors are defined in `CssLookup` see conf/dop.json warning=yellow, danger=red, success=green)
+* displays Day One Tags as a list of color coded slugs (tag colors are defined in `CssLookup` see `conf/dop.json` `warning=yellow`, `danger=red`, `success=green`)
 * places Day One Image at the top of the entry to which it was attached
-* counts the number of "Search-String" in Day One entry and displays it in a badge (Search-String is defined in `Count` see conf/dop.json)
+* counts the number of "Search-String" in Day One entry and displays it in a badge (Search-String is defined in `Count` see `conf/dop.json`)
 * decodes a starred entry and displayes it as a YES/no slug
 
 DOP also supports custom Title, URL and Description for each entry as follows:
-* if First line of the entry begins with "# " what follows is used for Title
-* if Second line of the entry begins with "//dop:desc" what follows  is used for Description
-* if Third line of the entry begins with "//dop:link" what follws is used for url link
+* if First line of the entry begins with `# ` what follows is used for Title
+* if Second line of the entry begins with `//dd: ` what follows  is used for Description
+* if Third line of the entry begins with `//dl: ` what follws is used for url link
 
 Example:
 
@@ -61,5 +61,5 @@ Start it:
 
 Apache License Version 2.0
 
-*rev:   203 *
+*rev:   204 *
 
