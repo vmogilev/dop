@@ -98,14 +98,7 @@ func (jc *JournalConf) Index(w http.ResponseWriter, r *http.Request) {
 		}
 	} else {
 		list = false
-		// since we convert custom links to lowercase we need
-		// to do the same here but only for custom links which
-		// at this point have to end in .html - lame but so it is
-		if strings.HasSuffix(strings.ToLower(entry), ".html") {
-			entry = jindex[strings.ToLower(entry)]
-		} else {
-			entry = jindex[entry]
-		}
+		entry = jindex[strings.ToLower(entry)]
 		if entry == "" {
 			NotFound(entry, w)
 			return

@@ -205,7 +205,7 @@ func Parse(entry string, search string, jc *JournalConf, jv *JournalVars) (Journ
 				if tokens.Link != "" {
 					jindex[tokens.Link] = uuid
 				} else {
-					jindex[uuid] = uuid
+					jindex[strings.ToLower(uuid)] = uuid
 				}
 			}
 		} else {
@@ -229,7 +229,7 @@ func Parse(entry string, search string, jc *JournalConf, jv *JournalVars) (Journ
 		title = snvl(tokens.Title, charDate)
 		tokens.Title = snvl(tokens.Title, title)
 		tokens.Desc = snvl(tokens.Desc, title)
-		tokens.Link = snvl(tokens.Link, uuid)
+		tokens.Link = snvl(tokens.Link, strings.ToLower(uuid))
 
 		dlog.Trace.Println("2: tokens=", tokens)
 
