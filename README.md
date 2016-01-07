@@ -1,6 +1,6 @@
 # DOP - Day One Parser
 
-I built [Day One](http://dayoneapp.com/) Parser to host my Food Log online and to share it with my nutritionist.  However it can be also used to run a blog powered by Day One Journal.  Here is what it does:
+I built [Day One](http://dayoneapp.com/) Parser to host my Food Log online and to share it with my nutritionist.  However it can also be used to run a blog powered by Day One Journal.  Here is what it does:
 
 * displays Day One Tags as a list of color coded slugs (tag colors are defined in `CssLookup` see `conf/dop.json` `warning=yellow`, `danger=red`, `success=green`)
 * places Day One Image at the top of the entry to which it was attached
@@ -10,7 +10,7 @@ I built [Day One](http://dayoneapp.com/) Parser to host my Food Log online and t
 DOP also supports custom Title, URL and Description for each entry as follows:
 * if First line of the entry begins with `# ` what follows is used for Title
 * if Second line of the entry begins with `//dd: ` what follows  is used for Description
-* if Third line of the entry begins with `//dl: ` what follws is used for url link
+* if Third line of the entry begins with `//dl: ` what follows is used for url link
 
 Example:
 
