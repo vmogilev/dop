@@ -5,7 +5,7 @@ import (
 	"path/filepath"
 
 	"github.com/gorilla/mux"
-	"github.com/rigingo/dlog"
+	"github.com/vmogilev/dlog"
 )
 
 func MountPoint(httpMount string) string {

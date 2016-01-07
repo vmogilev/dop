@@ -7,7 +7,7 @@ import (
 	"strconv"
 
 	"github.com/nfnt/resize"
-	"github.com/rigingo/dlog"
+	"github.com/vmogilev/dlog"
 	"gopkg.in/h2non/bimg.v0"
 )
 

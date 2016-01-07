@@ -4,7 +4,7 @@ import (
 	"net/http"
 	"time"
 
-	"github.com/rigingo/dlog"
+	"github.com/vmogilev/dlog"
 )
 
 func Logger(inner http.Handler, name string) http.Handler {

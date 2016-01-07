@@ -7,7 +7,7 @@ import (
 	"os"
 	"path/filepath"
 
-	"github.com/rigingo/dlog"
+	"github.com/vmogilev/dlog"
 )
 
 func main() {

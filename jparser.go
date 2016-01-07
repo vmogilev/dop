@@ -10,8 +10,8 @@ import (
 	"time"
 
 	"github.com/jpoehls/go-dayone"
-	"github.com/rigingo/dlog"
 	"github.com/russross/blackfriday"
+	"github.com/vmogilev/dlog"
 )
 
 type Journal struct {

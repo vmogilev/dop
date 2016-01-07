@@ -8,7 +8,7 @@ import (
 	"strings"
 
 	"github.com/gorilla/mux"
-	"github.com/rigingo/dlog"
+	"github.com/vmogilev/dlog"
 )
 
 type JournalVars struct {
