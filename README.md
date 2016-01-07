@@ -29,8 +29,8 @@ Example:
     GOPATH=/data/app/dev/golang; export GOPATH
     GO=/usr/local/go/bin/go; export GO
 
-    $GO get github.com/rigingo/dop
-    $GO install github.com/rigingo/dop
+    $GO get github.com/vmogilev/dop
+    $GO install github.com/vmogilev/dop
 
 ## Configuration
 
@@ -61,5 +61,5 @@ Start it:
 
 Apache License Version 2.0
 
-*rev:   204 *
+*rev:   205 *
 
